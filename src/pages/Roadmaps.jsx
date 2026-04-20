@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import { ROADMAPS } from '../lib/roadmaps';
 import { TRACKS } from '../lib/resources';
 import toast from 'react-hot-toast';
-import { ChevronDown, ChevronUp, Lock } from 'lucide-react';
+import { ChevronDown, ChevronUp, Lock, Play, FileText, ExternalLink } from 'lucide-react';
 
 // Roadmap tracks (exclude 'all' — we show all by default when no track selected)
 const ROADMAP_TRACKS = TRACKS.filter(t => t.id !== 'all');
@@ -179,23 +179,56 @@ export default function Roadmaps() {
                     </button>
 
                     {isOpen && (
-                      <div className="border-t border-white/[0.06] divide-y divide-white/[0.04]">
+                      <div className="border-t border-white/[0.06]">
                         {phase.steps.map(step => {
                           const done = roadmapProg[step.id] ?? false;
                           const busy = saving === `${roadmap.id}:${step.id}`;
+                          const hasResources = step.resources?.length > 0;
                           return (
-                            <div
-                              key={step.id}
-                              onClick={() => !busy && toggleStep(roadmap.id, step.id)}
-                              className="flex items-center gap-3 px-5 py-3 hover:bg-white/[0.02] cursor-pointer transition-colors"
-                            >
-                              {busy
-                                ? <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin shrink-0" />
-                                : <input type="checkbox" checked={done} readOnly className="checkbox shrink-0" />
-                              }
-                              <span className={`text-sm flex-1 ${done ? 'line-through text-slate-500' : 'text-slate-200'}`}>
-                                {step.label}
-                              </span>
+                            <div key={step.id} className="border-b border-white/[0.04] last:border-0">
+                              <div
+                                onClick={() => !busy && toggleStep(roadmap.id, step.id)}
+                                className="flex items-start gap-3 px-5 py-3 hover:bg-white/[0.02] cursor-pointer transition-colors"
+                              >
+                                <div className="mt-0.5 shrink-0">
+                                  {busy
+                                    ? <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                                    : <input type="checkbox" checked={done} readOnly className="checkbox" />
+                                  }
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <span className={`text-sm ${done ? 'line-through text-slate-500' : 'text-slate-200'}`}>
+                                    {step.label}
+                                  </span>
+                                  {hasResources && (
+                                    <div
+                                      className="flex flex-wrap gap-1.5 mt-2"
+                                      onClick={e => e.stopPropagation()}
+                                    >
+                                      {step.resources.map((res, i) => (
+                                        <a
+                                          key={i}
+                                          href={res.url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium transition-colors hover:opacity-90"
+                                          style={res.type === 'video'
+                                            ? { background: 'rgba(236,72,153,0.12)', color: '#f472b6', border: '1px solid rgba(236,72,153,0.2)' }
+                                            : { background: 'rgba(99,102,241,0.12)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.2)' }
+                                          }
+                                        >
+                                          {res.type === 'video'
+                                            ? <Play size={9} fill="currentColor" />
+                                            : <FileText size={9} />
+                                          }
+                                          {res.label}
+                                          <ExternalLink size={8} className="opacity-60" />
+                                        </a>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           );
                         })}
