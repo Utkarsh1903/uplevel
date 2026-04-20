@@ -4,15 +4,19 @@ import { useTheme } from '../context/ThemeContext';
 import Logo from './Logo';
 import {
   LayoutDashboard, Code2, Map, BookOpen, Mic2,
-  Sparkles, Settings, LogOut, Menu, X, Sun, Moon
+  Sparkles, Settings, LogOut, Menu, X, Sun, Moon,
+  Users, Shield
 } from 'lucide-react';
 import { useState } from 'react';
+
+const ADMIN_EMAIL = 'Sri.utkarsh1903@gmail.com';
 
 const NAV = [
   { to: '/dashboard',      icon: LayoutDashboard, label: 'Dashboard'      },
   { to: '/dsa',            icon: Code2,            label: 'DSA Tracker'   },
   { to: '/roadmaps',       icon: Map,              label: 'Roadmaps'      },
-  { to: '/resources',      icon: BookOpen,          label: 'Resources'     },
+  { to: '/resources',      icon: BookOpen,         label: 'Resources'     },
+  { to: '/professionals',  icon: Users,            label: 'Mentors'       },
   { to: '/interview-prep', icon: Mic2,             label: 'Interview Prep', premium: true },
 ];
 
@@ -73,6 +77,12 @@ export default function Layout() {
           <Settings size={17} />
           <span>Settings</span>
         </NavLink>
+        {profile?.email === ADMIN_EMAIL && (
+          <NavLink to="/admin" onClick={onClose} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <Shield size={17} className="text-indigo-400" />
+            <span>Admin</span>
+          </NavLink>
+        )}
         {/* Theme toggle */}
         <button
           onClick={toggleTheme}

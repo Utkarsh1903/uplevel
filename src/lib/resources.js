@@ -933,6 +933,92 @@ export const RESOURCE_CATEGORIES = [
   },
 ];
 
+// ─── FEATURED VIDEOS ─────────────────────────────────────────────────────────
+// These are embedded YouTube videos playable inside the app.
+// If a video doesn't load, update the videoId in this file.
+export const FEATURED_VIDEOS = [
+  {
+    id: 'vid-dp-fcc',
+    videoId: 'oBt53YbR9Kk',
+    title: 'Dynamic Programming — Learn to Solve Algorithmic Problems',
+    channel: 'freeCodeCamp.org',
+    duration: '5h 13m',
+    description: 'Complete dynamic programming course covering memoization, tabulation, and classic DP patterns used in FAANG interviews.',
+    tags: ['dp', 'algorithms', 'faang'],
+    mustKnow: true,
+  },
+  {
+    id: 'vid-graph-fcc',
+    videoId: 'tWVWeAqZ0WU',
+    title: 'Graph Algorithms for Technical Interviews',
+    channel: 'freeCodeCamp.org',
+    duration: '2h 14m',
+    description: 'BFS, DFS, Dijkstra, and more. All graph algorithms you need for coding interviews explained with visualizations.',
+    tags: ['graphs', 'bfs', 'dfs', 'faang'],
+    mustKnow: true,
+  },
+  {
+    id: 'vid-dsa-full',
+    videoId: 'RBSGKlAvoiM',
+    title: 'Data Structures Easy to Advanced — Full Course',
+    channel: 'freeCodeCamp.org',
+    duration: '8h 2m',
+    description: 'Covers arrays, linked lists, trees, heaps, hash tables, and graphs from scratch. Great for building strong fundamentals.',
+    tags: ['dsa', 'fundamentals', 'beginner'],
+    mustKnow: false,
+  },
+  {
+    id: 'vid-dp-striver',
+    videoId: 'tyB0ztf0DNY',
+    title: 'Dynamic Programming Playlist — Striver',
+    channel: 'take U forward',
+    duration: 'Playlist',
+    description: 'Striver\'s complete DP series in Hindi/English. Most comprehensive DP coverage for Indian SWE interviews.',
+    tags: ['dp', 'hindi', 'striver'],
+    mustKnow: true,
+  },
+  {
+    id: 'vid-sd-basics',
+    videoId: 'quLrc3PbuIw',
+    title: 'System Design Concepts — Full Course',
+    channel: 'freeCodeCamp.org',
+    duration: '4h 50m',
+    description: 'CAP theorem, consistent hashing, load balancing, caching, databases, and more — everything for senior SWE interviews.',
+    tags: ['system-design', 'hld', 'senior'],
+    mustKnow: true,
+  },
+  {
+    id: 'vid-lld-patterns',
+    videoId: 'v9ejT8FO-3I',
+    title: 'Design Patterns in Object Oriented Programming',
+    channel: 'Christopher Okhravi',
+    duration: 'Playlist',
+    description: 'In-depth series on GoF design patterns with real-world examples. Best for LLD interview preparation.',
+    tags: ['lld', 'design-patterns', 'oop'],
+    mustKnow: false,
+  },
+  {
+    id: 'vid-recursion',
+    videoId: 'ngCos392W4w',
+    title: 'Recursion in Programming — Full Course',
+    channel: 'freeCodeCamp.org',
+    duration: '2h 30m',
+    description: 'Master recursion from the ground up. Covers call stack, base cases, tree recursion, backtracking and more.',
+    tags: ['recursion', 'algorithms', 'beginner'],
+    mustKnow: false,
+  },
+  {
+    id: 'vid-sql-full',
+    videoId: 'HXV3zeQKqGY',
+    title: 'SQL Tutorial — Full Database Course',
+    channel: 'freeCodeCamp.org',
+    duration: '4h 20m',
+    description: 'Complete SQL from basics to advanced queries, JOINs, stored procedures. Essential for DBMS interview rounds.',
+    tags: ['sql', 'dbms', 'backend'],
+    mustKnow: false,
+  },
+];
+
 export const RESOURCE_TYPES = {
   platform:  { label: 'Platform',    color: '#10b981' },
   github:    { label: 'GitHub',      color: '#6366f1' },
