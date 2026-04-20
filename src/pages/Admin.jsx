@@ -117,10 +117,33 @@ export default function Admin() {
   }
 
   async function updatePremiumStatus(id, status) {
+    const req = premiumReqs.find(r => r.id === id);
+
+    // Update the request status
     const { error } = await supabase.from('premium_requests').update({ status }).eq('id', id);
-    if (error) { toast.error('Update failed'); return; }
-    setPremiumReqs(r => r.map(req => req.id === id ? { ...req, status } : req));
-    toast.success(`Marked as ${status}`);
+    if (error) {
+      toast.error(error.message ?? 'Update failed');
+      return;
+    }
+
+    // If activating, also flip the user's is_premium flag in profiles
+    if (status === 'activated' && req?.user_id) {
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ is_premium: true })
+        .eq('id', req.user_id);
+      if (profileError) {
+        toast.error('Status saved but failed to upgrade profile: ' + profileError.message);
+        return;
+      }
+      // Reflect in local profiles list
+      setProfiles(p => p.map(pr => pr.id === req.user_id ? { ...pr, is_premium: true } : pr));
+      toast.success(`${req.name} is now Premium! ✨`);
+    } else {
+      toast.success(`Marked as ${status}`);
+    }
+
+    setPremiumReqs(r => r.map(r2 => r2.id === id ? { ...r2, status } : r2));
   }
 
   async function togglePro(id, current) {
