@@ -10,7 +10,7 @@ import {
   RefreshCw, ArrowLeft, Shield
 } from 'lucide-react';
 
-const ADMIN_EMAIL = 'Sri.utkarsh1903@gmail.com';
+const ADMIN_EMAIL = 'sri.utkarsh1903@gmail.com';
 
 const STATUS_STYLES = {
   pending:   { label: 'Pending',   className: 'status-learning' },

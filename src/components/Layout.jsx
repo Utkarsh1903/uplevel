@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-const ADMIN_EMAIL = 'Sri.utkarsh1903@gmail.com';
+const ADMIN_EMAIL = 'sri.utkarsh1903@gmail.com';
 
 const NAV = [
   { to: '/dashboard',      icon: LayoutDashboard, label: 'Dashboard'      },
