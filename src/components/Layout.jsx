@@ -5,7 +5,7 @@ import Logo from './Logo';
 import {
   LayoutDashboard, Code2, Map, BookOpen, Mic2,
   Sparkles, Settings, LogOut, Menu, X, Sun, Moon,
-  Users, Shield
+  Users, Shield, Flame
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -18,6 +18,7 @@ const NAV = [
   { to: '/resources',      icon: BookOpen,         label: 'Resources'     },
   { to: '/professionals',  icon: Users,            label: 'Mentors'       },
   { to: '/interview-prep', icon: Mic2,             label: 'Interview Prep', premium: true },
+  { to: '/grind-room',    icon: Flame,            label: 'Grind Room'    },
 ];
 
 export default function Layout() {

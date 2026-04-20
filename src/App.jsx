@@ -15,6 +15,7 @@ import Settings      from './pages/Settings';
 import Professionals from './pages/Professionals';
 import FeaturedForm  from './pages/FeaturedForm';
 import Admin         from './pages/Admin';
+import GrindRoom     from './pages/GrindRoom';
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
@@ -52,6 +53,7 @@ export default function App() {
         <Route path="premium"        element={<Premium />} />
         <Route path="settings"       element={<Settings />} />
         <Route path="admin"          element={<Admin />} />
+        <Route path="grind-room"     element={<GrindRoom />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
