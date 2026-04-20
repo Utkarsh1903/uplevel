@@ -366,12 +366,21 @@ export default function Landing() {
           <p>
             Developed by{' '}
             <a
-              href="https://linkedin.com/in/utkarshsrivastava"
+              href="https://www.linkedin.com/in/utkarsh-srivastava-686b35153/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-indigo-400 hover:text-indigo-300 transition-colors"
             >
               Utkarsh Srivastava
+            </a>
+            {' '}&{' '}
+            <a
+              href="https://www.linkedin.com/in/pranjalsrivastava1312/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
+              Pranjal Srivastava
             </a>
           </p>
           <p style={{ color: 'var(--c-text-3)', opacity: 0.5 }}>© 2025 UpLevel · Zero infra cost · 100% honest</p>
