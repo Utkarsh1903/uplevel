@@ -2,15 +2,20 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { ROADMAPS } from '../lib/roadmaps';
+import { TRACKS } from '../lib/resources';
 import toast from 'react-hot-toast';
 import { ChevronDown, ChevronUp, Lock } from 'lucide-react';
 
+// Roadmap tracks (exclude 'all' — we show all by default when no track selected)
+const ROADMAP_TRACKS = TRACKS.filter(t => t.id !== 'all');
+
 export default function Roadmaps() {
   const { user, isPremium } = useAuth();
-  const [progress, setProgress] = useState({});
-  const [expanded, setExpanded] = useState({ 'sde2-product': true });
-  const [selected, setSelected] = useState('sde2-product');
-  const [saving, setSaving] = useState(null);
+  const [progress, setProgress]     = useState({});
+  const [expanded, setExpanded]     = useState({ 'sde2-product': true });
+  const [selected, setSelected]     = useState('sde2-product');
+  const [activeTrack, setActiveTrack] = useState('sde');
+  const [saving, setSaving]         = useState(null);
 
   useEffect(() => { if (user) load(); }, [user]);
 
@@ -47,12 +52,21 @@ export default function Roadmaps() {
     setSaving(null);
   }
 
+  // Filter roadmaps by active track, then pick the selected one
+  const trackRoadmaps = ROADMAPS.filter(r => r.track === activeTrack);
+
+  // When the track changes, auto-select the first roadmap in that track
+  function handleTrackChange(trackId) {
+    setActiveTrack(trackId);
+    const first = ROADMAPS.find(r => r.track === trackId);
+    if (first) setSelected(first.id);
+  }
+
   const roadmap = ROADMAPS.find(r => r.id === selected);
   const roadmapProg = progress[selected] ?? {};
   const allSteps = roadmap?.phases.flatMap(ph => ph.steps) ?? [];
   const doneCount = allSteps.filter(s => roadmapProg[s.id]).length;
   const pct = allSteps.length ? Math.round((doneCount / allSteps.length) * 100) : 0;
-
   const locked = roadmap?.premium && !isPremium;
 
   return (
@@ -62,24 +76,44 @@ export default function Roadmaps() {
         <p className="text-slate-400 text-sm mt-1">Step-by-step paths to your target role. Check off steps as you complete them.</p>
       </div>
 
-      {/* Roadmap selector tabs */}
+      {/* Track selector */}
       <div className="flex gap-2 flex-wrap">
-        {ROADMAPS.map(r => (
+        {ROADMAP_TRACKS.map(t => (
           <button
-            key={r.id}
-            onClick={() => setSelected(r.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all border ${
-              selected === r.id
+            key={t.id}
+            onClick={() => handleTrackChange(t.id)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium border transition-all ${
+              activeTrack === t.id
                 ? 'border-indigo-500 bg-indigo-500/20 text-indigo-300'
-                : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-white'
+                : 'border-white/10 text-slate-400 hover:text-white hover:border-white/20'
             }`}
           >
-            <span>{r.emoji}</span>
-            <span className="hidden sm:inline">{r.label}</span>
-            {r.premium && !isPremium && <Lock size={12} className="text-amber-400" />}
+            <span>{t.emoji}</span>
+            <span>{t.label}</span>
           </button>
         ))}
       </div>
+
+      {/* Roadmap selector — only shows roadmaps for the active track */}
+      {trackRoadmaps.length > 0 && (
+        <div className="flex gap-2 flex-wrap">
+          {trackRoadmaps.map(r => (
+            <button
+              key={r.id}
+              onClick={() => setSelected(r.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all border ${
+                selected === r.id
+                  ? 'border-indigo-500 bg-indigo-500/20 text-indigo-300'
+                  : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-white'
+              }`}
+            >
+              <span>{r.emoji}</span>
+              <span className="hidden sm:inline">{r.label}</span>
+              {r.premium && !isPremium && <Lock size={12} className="text-amber-400" />}
+            </button>
+          ))}
+        </div>
+      )}
 
       {roadmap && (
         <>
@@ -116,7 +150,6 @@ export default function Roadmaps() {
               <a href="/premium" className="btn-primary inline-flex">Unlock for ₹99/mo</a>
             </div>
           ) : (
-            /* Phases */
             <div className="space-y-4">
               {roadmap.phases.map((phase, idx) => {
                 const phDone = phase.steps.filter(s => roadmapProg[s.id]).length;
