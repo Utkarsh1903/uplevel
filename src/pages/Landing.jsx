@@ -1,18 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import Logo from '../components/Logo';
-import { ArrowRight, TrendingUp, Users, Sun, Moon, CheckCircle2, Sparkles, Calendar } from 'lucide-react';
+import { ArrowRight, TrendingUp, Users, Sun, Moon, CheckCircle2, Sparkles } from 'lucide-react';
 
-const FEATURED_PROS = [
-  {
-    name: 'Utkarsh Srivastava',
-    role: 'SDE-3',
-    company: 'CWAN',
-    tags: ['DSA', 'System Design', 'Career'],
-    topmate: 'https://topmate.io/utkarsh_srivastava101/',
-    color: '#6366f1',
-  },
-];
 
 const FEATURES = [
   {
@@ -268,75 +258,29 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Connect with Professionals ── */}
-      <section className="max-w-5xl mx-auto px-6 pb-20">
-        <div className="text-center mb-10">
-          <p className="code-tag text-sm mb-2">// connect_with_professionals[]</p>
-          <h2 className="text-2xl font-bold text-white">Get 1-on-1 guidance from senior engineers</h2>
-          <p className="text-sm mt-2" style={{ color: 'var(--c-text-3)' }}>
-            Engineers who've already cracked the switch — available to mentor you.
+      {/* ── Mentors CTA ── */}
+      <section className="max-w-3xl mx-auto px-6 pb-20">
+        <div className="glass rounded-3xl p-10 text-center" style={{ border: '1px solid rgba(99,102,241,0.2)' }}>
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)' }}>
+            <Users size={22} className="text-indigo-400" />
+          </div>
+          <p className="code-tag text-sm mb-3">// mentors.featured[]</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Get 1-on-1 guidance from senior engineers</h2>
+          <p className="text-sm mb-6" style={{ color: 'var(--c-text-3)' }}>
+            Engineers who've already cracked the switch. Book sessions, get resume reviews, and mock interviews.
+            <br />Sign in to see all available mentors.
           </p>
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-          {FEATURED_PROS.map(pro => (
-            <div key={pro.name} className="glass glass-hover rounded-2xl p-5 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: `linear-gradient(90deg, ${pro.color}, #10b981)` }} />
-              <div className="flex items-center gap-3 mb-3">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold"
-                  style={{ background: `${pro.color}33`, border: `1px solid ${pro.color}40` }}
-                >
-                  {pro.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                </div>
-                <div>
-                  <p className="text-white font-semibold text-sm">{pro.name}</p>
-                  <p className="font-mono text-xs" style={{ color: 'var(--c-text-3)' }}>
-                    {pro.role} <span style={{ color: pro.color }}>@</span> {pro.company}
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {pro.tags.map(tag => (
-                  <span key={tag} className="text-xs px-2 py-0.5 rounded-full font-mono" style={{ background: `${pro.color}18`, color: pro.color, border: `1px solid ${pro.color}30` }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <a
-                href={pro.topmate}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-ghost w-full text-center text-xs flex items-center justify-center gap-1.5"
-              >
-                <Calendar size={12} /> Book a Session
-              </a>
-            </div>
-          ))}
-
-          {/* "More coming" card */}
-          <div className="glass rounded-2xl p-5 border border-dashed border-white/10 flex flex-col items-center justify-center text-center min-h-[180px]">
-            <div className="w-10 h-10 rounded-xl bg-white/[0.04] flex items-center justify-center mb-3">
-              <Sparkles size={18} className="text-amber-400" />
-            </div>
-            <p className="text-white font-semibold text-sm mb-1">More mentors coming</p>
-            <p className="text-slate-500 text-xs mb-3">Are you a senior engineer?</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button onClick={() => navigate('/auth')} className="btn-primary flex items-center gap-2 justify-center">
+              Sign in to meet mentors <ArrowRight size={14} />
+            </button>
             <button
               onClick={() => navigate('/get-featured')}
-              className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
+              className="btn-ghost flex items-center gap-2 justify-center text-sm"
             >
-              Apply to get featured →
+              <Sparkles size={14} className="text-amber-400" /> Apply as a mentor
             </button>
           </div>
-        </div>
-
-        <div className="text-center">
-          <button
-            onClick={() => navigate('/professionals')}
-            className="btn-ghost flex items-center gap-2 mx-auto"
-          >
-            View all mentors <ArrowRight size={14} />
-          </button>
         </div>
       </section>
 

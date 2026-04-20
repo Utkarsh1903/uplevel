@@ -39,7 +39,6 @@ export default function App() {
       <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Landing />} />
       <Route path="/auth" element={user ? <Navigate to="/dashboard" replace /> : <Auth />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
-      <Route path="/professionals" element={<Professionals />} />
       <Route path="/get-featured"  element={<FeaturedForm />} />
 
       {/* Protected routes */}
@@ -48,6 +47,7 @@ export default function App() {
         <Route path="dsa"            element={<DSATracker />} />
         <Route path="roadmaps"       element={<Roadmaps />} />
         <Route path="resources"      element={<Resources />} />
+        <Route path="professionals"  element={<Professionals />} />
         <Route path="interview-prep" element={<InterviewPrep />} />
         <Route path="premium"        element={<Premium />} />
         <Route path="settings"       element={<Settings />} />
