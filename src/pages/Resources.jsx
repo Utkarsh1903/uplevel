@@ -1,3 +1,4 @@
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useState } from 'react';
 import { RESOURCE_CATEGORIES, RESOURCE_TYPES, FEATURED_VIDEOS, TRACKS } from '../lib/resources';
 import { ExternalLink, Star, Play, X, Youtube } from 'lucide-react';
@@ -76,6 +77,7 @@ function VideoCard({ video }) {
 }
 
 export default function Resources() {
+  usePageTitle('Free Resources');
   const [selectedTrack, setSelectedTrack] = useState('all');
   const [onlyMust, setOnlyMust]           = useState(false);
   const [mainTab, setMainTab]             = useState('resources'); // 'resources' | 'videos'

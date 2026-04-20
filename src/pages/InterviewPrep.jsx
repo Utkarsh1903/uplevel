@@ -1,3 +1,4 @@
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useAuth } from '../context/AuthContext';
 import PremiumGate from '../components/PremiumGate';
 import { useState } from 'react';
@@ -86,6 +87,7 @@ const NEGOTIATION_SCRIPTS = [
 ];
 
 export default function InterviewPrep() {
+  usePageTitle('Interview Prep');
   const { isPremium } = useAuth();
 
   if (!isPremium) return <PremiumGate feature="Interview Prep Vault" />;

@@ -1,3 +1,4 @@
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -140,6 +141,7 @@ function ProfessionalCard({ pro }) {
 }
 
 export default function Professionals() {
+  usePageTitle('Mentors');
   const navigate  = useNavigate();
   const { user }  = useAuth();
   const { theme, toggleTheme } = useTheme();

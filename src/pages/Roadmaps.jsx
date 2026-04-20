@@ -1,3 +1,4 @@
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -10,6 +11,7 @@ import { ChevronDown, ChevronUp, Lock, Play, FileText, ExternalLink } from 'luci
 const ROADMAP_TRACKS = TRACKS.filter(t => t.id !== 'all');
 
 export default function Roadmaps() {
+  usePageTitle('Career Roadmaps');
   const { user, isPremium } = useAuth();
   const [progress, setProgress]     = useState({});
   const [expanded, setExpanded]     = useState({ 'sde2-product': true });

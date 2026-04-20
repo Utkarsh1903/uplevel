@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /get-featured
+
+# Keep authenticated pages out of index (no content without login)
+Disallow: /dashboard
+Disallow: /dsa
+Disallow: /roadmaps
+Disallow: /resources
+Disallow: /professionals
+Disallow: /interview-prep
+Disallow: /premium
+Disallow: /settings
+Disallow: /admin
+Disallow: /auth/callback
+
+Sitemap: https://uplevel-sandy.vercel.app/sitemap.xml

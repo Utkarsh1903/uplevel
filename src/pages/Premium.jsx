@@ -1,3 +1,4 @@
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -24,6 +25,7 @@ const FEATURES_PREMIUM = [
 ];
 
 export default function Premium() {
+  usePageTitle('Go Premium');
   const { user, profile, isPremium } = useAuth();
   const [form, setForm] = useState({
     name: profile?.name ?? '',

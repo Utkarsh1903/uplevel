@@ -1,3 +1,4 @@
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -14,6 +15,7 @@ const STATUS_CONFIG = {
 };
 
 export default function DSATracker() {
+  usePageTitle('DSA Tracker');
   const { user } = useAuth();
   const [progress, setProgress]   = useState({});
   const [loading, setLoading]     = useState(true);

@@ -1,3 +1,4 @@
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -17,6 +18,7 @@ const TARGET_ROLES = [
 ];
 
 export default function Settings() {
+  usePageTitle('Settings');
   const { user, profile, isPremium, signOut, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({

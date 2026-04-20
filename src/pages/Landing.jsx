@@ -1,3 +1,4 @@
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import Logo from '../components/Logo';
@@ -52,6 +53,7 @@ const TERMINAL_LINES = [
 ];
 
 export default function Landing() {
+  usePageTitle(null);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 

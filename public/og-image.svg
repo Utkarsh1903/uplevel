@@ -1,0 +1,85 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f"/>
+      <stop offset="100%" style="stop-color:#0f0f1a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="100%" style="stop-color:#a855f7"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Grid lines -->
+  <g stroke="#ffffff" stroke-opacity="0.03" stroke-width="1">
+    <line x1="0" y1="105" x2="1200" y2="105"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="525" x2="1200" y2="525"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+
+  <!-- Glow circles -->
+  <circle cx="200" cy="315" r="250" fill="#6366f1" fill-opacity="0.06"/>
+  <circle cx="1000" cy="315" r="200" fill="#10b981" fill-opacity="0.05"/>
+
+  <!-- Top accent bar -->
+  <rect x="60" y="60" width="80" height="4" rx="2" fill="url(#accent)"/>
+
+  <!-- Logo circle -->
+  <circle cx="100" cy="130" r="28" fill="#6366f1" fill-opacity="0.2"/>
+  <circle cx="100" cy="130" r="28" stroke="#6366f1" stroke-opacity="0.4" stroke-width="1.5" fill="none"/>
+  <text x="100" y="137" text-anchor="middle" font-family="monospace" font-size="18" font-weight="bold" fill="#818cf8">U</text>
+
+  <!-- Brand name -->
+  <text x="144" y="122" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="white">UpLevel</text>
+  <text x="144" y="146" font-family="monospace" font-size="13" fill="#6366f1">for indian devs</text>
+
+  <!-- Main headline -->
+  <text x="60" y="260" font-family="Arial, sans-serif" font-size="62" font-weight="900" fill="white">Escape the</text>
+  <text x="60" y="340" font-family="monospace" font-size="62" font-weight="900" fill="url(#accent)">service company</text>
+  <text x="60" y="420" font-family="Arial, sans-serif" font-size="62" font-weight="900" fill="white">trap. For good.</text>
+
+  <!-- Sub text -->
+  <text x="60" y="476" font-family="Arial, sans-serif" font-size="22" fill="#94a3b8">DSA Tracker · Career Roadmaps · Free Resources · Mentors</text>
+
+  <!-- Stats pills -->
+  <rect x="60" y="515" width="190" height="42" rx="21" fill="#6366f1" fill-opacity="0.15" stroke="#6366f1" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="155" y="541" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="600" fill="#818cf8">800+ engineers</text>
+
+  <rect x="268" y="515" width="160" height="42" rx="21" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="348" y="541" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="600" fill="#6ee7b7">100% free</text>
+
+  <rect x="446" y="515" width="200" height="42" rx="21" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="546" y="541" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="600" fill="#fbbf24">₹99/mo premium</text>
+
+  <!-- Right side terminal mockup -->
+  <rect x="760" y="200" width="390" height="260" rx="12" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+  <rect x="760" y="200" width="390" height="36" rx="12" fill="#ffffff" fill-opacity="0.04"/>
+  <circle cx="788" cy="218" r="6" fill="#ef4444" fill-opacity="0.7"/>
+  <circle cx="808" cy="218" r="6" fill="#f59e0b" fill-opacity="0.7"/>
+  <circle cx="828" cy="218" r="6" fill="#10b981" fill-opacity="0.7"/>
+  <text x="790" y="255" font-family="monospace" font-size="13" fill="#6366f1">$ uplevel --status</text>
+  <text x="790" y="278" font-family="monospace" font-size="12" fill="#475569">  user    : Rahul Kumar</text>
+  <text x="790" y="298" font-family="monospace" font-size="12" fill="#475569">  target  : SDE-2 @ Amazon</text>
+  <text x="790" y="318" font-family="monospace" font-size="12" fill="#475569">  streak  : <tspan fill="#10b981">47 days 🔥</tspan></text>
+  <text x="790" y="338" font-family="monospace" font-size="12" fill="#475569">  solved  : <tspan fill="#a855f7">134 / 200</tspan></text>
+  <text x="790" y="358" font-family="monospace" font-size="12" fill="#475569">  ready   : <tspan fill="#f59e0b">68% for Flipkart</tspan></text>
+  <text x="790" y="390" font-family="monospace" font-size="12" fill="#10b981">  ✓ Keep going. You are close.</text>
+  <text x="790" y="430" font-family="monospace" font-size="13" fill="#6366f1">█</text>
+
+  <!-- URL -->
+  <text x="60" y="600" font-family="monospace" font-size="14" fill="#334155">uplevel-sandy.vercel.app</text>
+</svg>
