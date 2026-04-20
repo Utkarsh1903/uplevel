@@ -13,12 +13,12 @@ const ADMIN_EMAIL = 'sri.utkarsh1903@gmail.com';
 
 const NAV = [
   { to: '/dashboard',      icon: LayoutDashboard, label: 'Dashboard'      },
+  { to: '/grind-room',     icon: Flame,           label: 'Grind Room'    },
   { to: '/dsa',            icon: Code2,            label: 'DSA Tracker'   },
   { to: '/roadmaps',       icon: Map,              label: 'Roadmaps'      },
   { to: '/resources',      icon: BookOpen,         label: 'Resources'     },
   { to: '/professionals',  icon: Users,            label: 'Mentors'       },
   { to: '/interview-prep', icon: Mic2,             label: 'Interview Prep', premium: true },
-  { to: '/grind-room',    icon: Flame,            label: 'Grind Room'    },
 ];
 
 export default function Layout() {
