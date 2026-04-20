@@ -146,6 +146,14 @@ export default function Admin() {
     setPremiumReqs(r => r.map(r2 => r2.id === id ? { ...r2, status } : r2));
   }
 
+  async function toggleUserPremium(userId, currentVal) {
+    const next = !currentVal;
+    const { error } = await supabase.from('profiles').update({ is_premium: next }).eq('id', userId);
+    if (error) { toast.error('Update failed'); return; }
+    setProfiles(p => p.map(pr => pr.id === userId ? { ...pr, is_premium: next } : pr));
+    toast.success(next ? 'Premium activated ✨' : 'Premium deactivated');
+  }
+
   async function togglePro(id, current) {
     const { error } = await supabase.from('professionals').update({ is_active: !current }).eq('id', id);
     if (error) { toast.error('Update failed'); return; }
@@ -266,6 +274,7 @@ export default function Admin() {
                     <th className="text-left px-5 py-3 font-medium hidden md:table-cell">Role</th>
                     <th className="text-left px-5 py-3 font-medium">Plan</th>
                     <th className="text-left px-5 py-3 font-medium hidden sm:table-cell">Joined</th>
+                    <th className="text-left px-5 py-3 font-medium">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[0.03]">
@@ -290,6 +299,20 @@ export default function Admin() {
                       </td>
                       <td className="px-5 py-3 text-slate-500 text-xs hidden sm:table-cell font-mono">
                         {p.created_at ? format(new Date(p.created_at), 'MMM d, yyyy') : '—'}
+                      </td>
+                      <td className="px-5 py-3">
+                        {p.email !== ADMIN_EMAIL && (
+                          <button
+                            onClick={() => toggleUserPremium(p.id, p.is_premium)}
+                            className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
+                              p.is_premium
+                                ? 'border-red-500/30 text-red-400 hover:bg-red-500/10'
+                                : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'
+                            }`}
+                          >
+                            {p.is_premium ? 'Deactivate' : 'Grant Premium'}
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
