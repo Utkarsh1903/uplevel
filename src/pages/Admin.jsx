@@ -8,7 +8,7 @@ import {
   Users, FileText, Briefcase, BarChart2,
   CheckCircle2, XCircle, Clock, Plus, Trash2,
   RefreshCw, ArrowLeft, Shield, Sparkles, Phone,
-  Mail, Linkedin, ExternalLink, Star
+  Mail, Linkedin, ExternalLink, Star, Wifi
 } from 'lucide-react';
 
 const ADMIN_EMAIL = 'sri.utkarsh1903@gmail.com';
@@ -98,11 +98,13 @@ export default function Admin() {
     const totalProblems    = recentLogs.reduce((s, l) => s + (l.problems_solved || 0), 0);
     const pendingMentors   = mentorData.filter(r => r.status === 'pending').length;
     const pendingPremiums  = premiumData.filter(r => r.status === 'pending').length;
+    const fiveMinAgo       = new Date(Date.now() - 5 * 60 * 1000);
+    const onlineNow        = allProfiles.filter(p => p.last_seen && new Date(p.last_seen) > fiveMinAgo).length;
 
     setStats({
       totalUsers:      allProfiles.length,
       activeToday:     todayLogs.length,
-      problemsThisWeek: totalProblems,
+      onlineNow,
       pendingMentors,
       pendingPremiums,
     });
@@ -231,9 +233,20 @@ export default function Admin() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           <StatCard icon={<Users size={20} />}    value={stats.totalUsers}        label="Total Users"         color="#6366f1" />
           <StatCard icon={<CheckCircle2 size={20}/>} value={stats.activeToday}    label="Active Today"        color="#10b981" />
+          <StatCard
+            icon={
+              <div className="flex items-center gap-1.5">
+                <Wifi size={20} />
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              </div>
+            }
+            value={stats.onlineNow}
+            label="Online Now (5 min)"
+            color="#34d399"
+          />
           <StatCard icon={<Sparkles size={20} />} value={stats.pendingPremiums}   label="Pending Premium Reqs" color="#f59e0b" />
           <StatCard icon={<Star size={20} />}     value={stats.pendingMentors}    label="Pending Mentor Apps" color="#ec4899" />
         </div>
@@ -274,48 +287,72 @@ export default function Admin() {
                     <th className="text-left px-5 py-3 font-medium hidden md:table-cell">Role</th>
                     <th className="text-left px-5 py-3 font-medium">Plan</th>
                     <th className="text-left px-5 py-3 font-medium hidden sm:table-cell">Joined</th>
+                    <th className="text-left px-5 py-3 font-medium hidden lg:table-cell">Last Seen</th>
                     <th className="text-left px-5 py-3 font-medium">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[0.03]">
-                  {profiles.map(p => (
-                    <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="px-5 py-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
-                            {p.name?.[0] ?? '?'}
+                  {profiles.map(p => {
+                    const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
+                    const isOnline   = p.last_seen && new Date(p.last_seen) > fiveMinAgo;
+                    return (
+                      <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="px-5 py-3">
+                          <div className="flex items-center gap-3">
+                            <div className="relative">
+                              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                                {p.name?.[0] ?? '?'}
+                              </div>
+                              {isOnline && (
+                                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#0d1117] animate-pulse" />
+                              )}
+                            </div>
+                            <div>
+                              <p className="text-white font-medium text-xs">{p.name ?? 'Unknown'}</p>
+                              <p className="text-slate-500 text-xs">{p.email}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-white font-medium text-xs">{p.name ?? 'Unknown'}</p>
-                            <p className="text-slate-500 text-xs">{p.email}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-5 py-3 text-slate-400 text-xs hidden md:table-cell">{p.curr_role ?? '—'}</td>
-                      <td className="px-5 py-3">
-                        <span className={`badge text-xs ${p.is_premium ? 'status-done' : 'status-todo'}`}>
-                          {p.is_premium ? '✦ Premium' : 'Free'}
-                        </span>
-                      </td>
-                      <td className="px-5 py-3 text-slate-500 text-xs hidden sm:table-cell font-mono">
-                        {p.created_at ? format(new Date(p.created_at), 'MMM d, yyyy') : '—'}
-                      </td>
-                      <td className="px-5 py-3">
-                        {p.email !== ADMIN_EMAIL && (
-                          <button
-                            onClick={() => toggleUserPremium(p.id, p.is_premium)}
-                            className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
-                              p.is_premium
-                                ? 'border-red-500/30 text-red-400 hover:bg-red-500/10'
-                                : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'
-                            }`}
-                          >
-                            {p.is_premium ? 'Deactivate' : 'Grant Premium'}
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="px-5 py-3 text-slate-400 text-xs hidden md:table-cell">{p.curr_role ?? '—'}</td>
+                        <td className="px-5 py-3">
+                          <span className={`badge text-xs ${p.is_premium ? 'status-done' : 'status-todo'}`}>
+                            {p.is_premium ? '✦ Premium' : 'Free'}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3 text-slate-500 text-xs hidden sm:table-cell font-mono">
+                          {p.created_at ? format(new Date(p.created_at), 'MMM d, yyyy') : '—'}
+                        </td>
+                        <td className="px-5 py-3 hidden lg:table-cell">
+                          {isOnline ? (
+                            <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                              online
+                            </span>
+                          ) : p.last_seen ? (
+                            <span className="text-xs text-slate-600 font-mono">
+                              {format(new Date(p.last_seen), 'MMM d · HH:mm')}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-slate-700 font-mono">never</span>
+                          )}
+                        </td>
+                        <td className="px-5 py-3">
+                          {p.email !== ADMIN_EMAIL && (
+                            <button
+                              onClick={() => toggleUserPremium(p.id, p.is_premium)}
+                              className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
+                                p.is_premium
+                                  ? 'border-red-500/30 text-red-400 hover:bg-red-500/10'
+                                  : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'
+                              }`}
+                            >
+                              {p.is_premium ? 'Deactivate' : 'Grant Premium'}
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

@@ -69,16 +69,16 @@ const FEATURES = [
 ];
 
 const STORIES = [
-  { name: 'Priya S.',  from: 'TCS — ₹5.2 LPA',    to: 'Flipkart — ₹28 LPA',  time: '7 months', avatar: 'P', color: '#6366f1' },
-  { name: 'Rohit M.',  from: 'Infosys — ₹4.8 LPA', to: 'Amazon — ₹32 LPA',   time: '5 months', avatar: 'R', color: '#10b981' },
-  { name: 'Sneha K.',  from: 'Wipro — ₹6 LPA',     to: 'Swiggy — ₹22 LPA',   time: '6 months', avatar: 'S', color: '#ec4899' },
+  { name: 'Priya S.',  from: 'Service Co. — ₹5.2 LPA',  to: 'Product Co. — ₹28 LPA',  time: '7 months', avatar: 'P', color: '#6366f1' },
+  { name: 'Rohit M.',  from: 'Service Co. — ₹4.8 LPA',  to: 'Product Co. — ₹32 LPA',  time: '5 months', avatar: 'R', color: '#10b981' },
+  { name: 'Sneha K.',  from: 'Service Co. — ₹6 LPA',    to: 'Product Co. — ₹22 LPA',  time: '6 months', avatar: 'S', color: '#ec4899' },
 ];
 
 const TERMINAL_LINES = [
   { text: '$ uplevel --status', color: '#a5b4fc' },
   { text: '', color: '' },
   { text: '  user        : Utkarsh S.', color: '#94a3b8' },
-  { text: '  target      : SDE-2 @ Amazon', color: '#94a3b8' },
+  { text: '  target      : SDE-2 @ Product Co.', color: '#94a3b8' },
   { text: '  streak      : 🔥 14 days', color: '#f97316' },
   { text: '', color: '' },
   { text: '  DSA Progress', color: '#e2e8f0' },
@@ -173,8 +173,8 @@ export default function Landing() {
             </h1>
 
             <p className="text-lg mb-3" style={{ color: 'var(--c-text-2)', lineHeight: 1.7 }}>
-              Thousands of CS grads are stuck at TCS, Infosys & Wipro —
-              doing CRUD work for ₹5 LPA while watching others crack Amazon.
+              Thousands of CS grads are stuck at service companies —
+              doing CRUD work for ₹5 LPA while watching others crack top product companies.
             </p>
             <p className="text-lg mb-8 font-mono text-sm" style={{ color: 'var(--c-text-3)' }}>
               UpLevel gives you the exact system they used.

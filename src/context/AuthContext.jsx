@@ -53,6 +53,16 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Heartbeat: update last_seen every 60s while logged in
+  useEffect(() => {
+    if (!user) return;
+    const ping = () =>
+      supabase.from('profiles').update({ last_seen: new Date().toISOString() }).eq('id', user.id);
+    ping();
+    const interval = setInterval(ping, 60_000);
+    return () => clearInterval(interval);
+  }, [user?.id]);
+
   async function signInWithGoogle() {
     return supabase.auth.signInWithOAuth({
       provider: 'google',
