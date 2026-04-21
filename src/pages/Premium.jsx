@@ -45,9 +45,8 @@ export default function Premium() {
 
   useEffect(() => {
     supabase
-      .from('premium_requests')
-      .select('*', { count: 'exact', head: true })
-      .then(({ count }) => setRequestCount(count ?? 0));
+      .rpc('get_premium_count')
+      .then(({ data }) => setRequestCount(data ?? 0));
   }, []);
 
   const spotsLeft = requestCount !== null ? Math.max(0, OFFER_LIMIT - requestCount) : null;

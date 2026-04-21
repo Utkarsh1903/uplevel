@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
-import { format, subDays } from 'date-fns';
+import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import {
-  Users, FileText, Briefcase, BarChart2,
-  CheckCircle2, XCircle, Clock, Plus, Trash2,
+  Users, Briefcase,
+  CheckCircle2, XCircle, Plus, Trash2,
   RefreshCw, ArrowLeft, Shield, Sparkles, Phone,
-  Mail, Linkedin, ExternalLink, Star, Wifi
+  Mail, Linkedin, ExternalLink, Star, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 const ADMIN_EMAIL = 'sri.utkarsh1903@gmail.com';
@@ -57,6 +57,9 @@ export default function Admin() {
   const [pros, setPros]             = useState([]);
   const [stats, setStats]           = useState({});
 
+  const [userPage, setUserPage] = useState(1);
+  const USERS_PER_PAGE = 20;
+
   const [showAddPro, setShowAddPro] = useState(false);
   const [proForm, setProForm] = useState({
     name: '', role: '', company: '', topmate_url: '', linkedin_url: '', bio: '', tags: '',
@@ -70,64 +73,32 @@ export default function Admin() {
     if (isAdmin) loadAll();
   }, [profile]);
 
-  // Poll presence stats separately — gives heartbeat time to land, then stays live
-  useEffect(() => {
-    if (!isAdmin) return;
-    const fetchPresence = async () => {
-      const { data } = await supabase.from('profiles').select('id, last_seen');
-      if (!data) return;
-      const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
-      const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
-      // Update stat cards
-      setStats(s => ({
-        ...s,
-        onlineNow:   data.filter(p => p.last_seen && new Date(p.last_seen) > fiveMinAgo).length,
-        activeToday: data.filter(p => p.last_seen && new Date(p.last_seen) >= startOfDay).length,
-      }));
-      // Patch last_seen into the profiles list so the table column shows correct values
-      setProfiles(prev => prev.map(p => {
-        const fresh = data.find(d => d.id === p.id);
-        return fresh ? { ...p, last_seen: fresh.last_seen } : p;
-      }));
-    };
-    // Wait 3s for the heartbeat write to complete, then poll every 30s
-    const delayed  = setTimeout(fetchPresence, 3000);
-    const interval = setInterval(fetchPresence, 30_000);
-    return () => { clearTimeout(delayed); clearInterval(interval); };
-  }, [isAdmin]);
-
   async function loadAll() {
     setLoading(true);
-    const weekAgo = format(subDays(new Date(), 7), 'yyyy-MM-dd');
 
-    const [profilesRes, logsAllRes, mentorRes, premiumRes, prosRes] = await Promise.all([
+    const [profilesRes, mentorRes, premiumRes, prosRes] = await Promise.all([
       supabase.from('profiles').select('*').order('created_at', { ascending: false }),
-      supabase.from('daily_logs').select('problems_solved, study_minutes, date').gte('date', weekAgo),
       supabase.from('feature_requests').select('*').order('created_at', { ascending: false }),
       supabase.from('premium_requests').select('*').order('created_at', { ascending: false }),
       supabase.from('professionals').select('*').order('sort_order', { ascending: true }),
     ]);
 
-    const allProfiles  = profilesRes.data  ?? [];
-    const recentLogs   = logsAllRes.data   ?? [];
-    const mentorData   = mentorRes.data    ?? [];
-    const premiumData  = premiumRes.data   ?? [];
+    const allProfiles = profilesRes.data ?? [];
+    const mentorData  = mentorRes.data   ?? [];
+    const premiumData = premiumRes.data  ?? [];
 
     setProfiles(allProfiles);
     setMentorReqs(mentorData);
     setPremiumReqs(premiumData);
     setPros(prosRes.data ?? []);
 
-    const totalProblems    = recentLogs.reduce((s, l) => s + (l.problems_solved || 0), 0);
-    const pendingMentors   = mentorData.filter(r => r.status === 'pending').length;
-    const pendingPremiums  = premiumData.filter(r => r.status === 'pending').length;
-    const fiveMinAgo       = new Date(Date.now() - 5 * 60 * 1000);
-    const onlineNow        = allProfiles.filter(p => p.last_seen && new Date(p.last_seen) > fiveMinAgo).length;
+    const pendingMentors  = mentorData.filter(r => r.status === 'pending').length;
+    const pendingPremiums = premiumData.filter(r => r.status === 'pending').length;
+    const totalPremium    = allProfiles.filter(p => p.is_premium).length;
 
     setStats({
-      totalUsers:      allProfiles.length,
-      activeToday:     0, // updated by presence poll after 3s
-      onlineNow,
+      totalUsers:    allProfiles.length,
+      totalPremium,
       pendingMentors,
       pendingPremiums,
     });
@@ -224,10 +195,11 @@ export default function Admin() {
   );
 
   const TABS = [
-    { id: 'overview',       label: 'Users',             icon: Users,    badge: null },
-    { id: 'premium-reqs',   label: 'Premium Requests',  icon: Sparkles, badge: stats.pendingPremiums },
-    { id: 'mentor-reqs',    label: 'Mentor Applications', icon: Star,   badge: stats.pendingMentors },
-    { id: 'professionals',  label: 'Professionals',     icon: Briefcase, badge: null },
+    { id: 'overview',       label: 'All Users',          icon: Users,    badge: null },
+    { id: 'premium-users',  label: 'Premium Users',      icon: Sparkles, badge: null },
+    { id: 'premium-reqs',   label: 'Premium Requests',   icon: Sparkles, badge: stats.pendingPremiums },
+    { id: 'mentor-reqs',    label: 'Mentor Applications', icon: Star,    badge: stats.pendingMentors },
+    { id: 'professionals',  label: 'Professionals',      icon: Briefcase, badge: null },
   ];
 
   return (
@@ -256,22 +228,11 @@ export default function Admin() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-          <StatCard icon={<Users size={20} />}    value={stats.totalUsers}        label="Total Users"         color="#6366f1" />
-          <StatCard icon={<CheckCircle2 size={20}/>} value={stats.activeToday}    label="Active Today"        color="#10b981" />
-          <StatCard
-            icon={
-              <div className="flex items-center gap-1.5">
-                <Wifi size={20} />
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              </div>
-            }
-            value={stats.onlineNow}
-            label="Online Now (5 min)"
-            color="#34d399"
-          />
-          <StatCard icon={<Sparkles size={20} />} value={stats.pendingPremiums}   label="Pending Premium Reqs" color="#f59e0b" />
-          <StatCard icon={<Star size={20} />}     value={stats.pendingMentors}    label="Pending Mentor Apps" color="#ec4899" />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+          <StatCard icon={<Users size={20} />}       value={stats.totalUsers}      label="Total Users"          color="#6366f1" />
+          <StatCard icon={<Sparkles size={20} />}    value={stats.totalPremium}    label="Premium Users"        color="#f59e0b" />
+          <StatCard icon={<Sparkles size={20} />}    value={stats.pendingPremiums} label="Pending Premium Reqs" color="#a855f7" />
+          <StatCard icon={<Star size={20} />}        value={stats.pendingMentors}  label="Pending Mentor Apps"  color="#ec4899" />
         </div>
 
         {/* Tabs */}
@@ -297,38 +258,33 @@ export default function Admin() {
         </div>
 
         {/* ── TAB: Users ── */}
-        {tab === 'overview' && (
-          <div className="glass rounded-2xl overflow-hidden fade-in">
-            <div className="px-5 py-4 border-b border-white/[0.06]">
-              <h2 className="font-semibold text-white">All Users ({profiles.length})</h2>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-xs text-slate-500 border-b border-white/[0.04]">
-                    <th className="text-left px-5 py-3 font-medium">User</th>
-                    <th className="text-left px-5 py-3 font-medium hidden md:table-cell">Role</th>
-                    <th className="text-left px-5 py-3 font-medium">Plan</th>
-                    <th className="text-left px-5 py-3 font-medium hidden sm:table-cell">Joined</th>
-                    <th className="text-left px-5 py-3 font-medium hidden lg:table-cell">Last Seen</th>
-                    <th className="text-left px-5 py-3 font-medium">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/[0.03]">
-                  {profiles.map(p => {
-                    const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
-                    const isOnline   = p.last_seen && new Date(p.last_seen) > fiveMinAgo;
-                    return (
+        {tab === 'overview' && (() => {
+          const totalPages      = Math.ceil(profiles.length / USERS_PER_PAGE);
+          const paginated       = profiles.slice((userPage - 1) * USERS_PER_PAGE, userPage * USERS_PER_PAGE);
+          return (
+            <div className="glass rounded-2xl overflow-hidden fade-in">
+              <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+                <h2 className="font-semibold text-white">All Users ({profiles.length})</h2>
+                <span className="text-xs text-slate-500 font-mono">page {userPage} of {totalPages}</span>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-xs text-slate-500 border-b border-white/[0.04]">
+                      <th className="text-left px-5 py-3 font-medium">User</th>
+                      <th className="text-left px-5 py-3 font-medium hidden md:table-cell">Role</th>
+                      <th className="text-left px-5 py-3 font-medium">Plan</th>
+                      <th className="text-left px-5 py-3 font-medium hidden sm:table-cell">Joined</th>
+                      <th className="text-left px-5 py-3 font-medium">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.03]">
+                    {paginated.map(p => (
                       <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
                         <td className="px-5 py-3">
                           <div className="flex items-center gap-3">
-                            <div className="relative">
-                              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
-                                {p.name?.[0] ?? '?'}
-                              </div>
-                              {isOnline && (
-                                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#0d1117] animate-pulse" />
-                              )}
+                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                              {p.name?.[0] ?? '?'}
                             </div>
                             <div>
                               <p className="text-white font-medium text-xs">{p.name ?? 'Unknown'}</p>
@@ -345,20 +301,6 @@ export default function Admin() {
                         <td className="px-5 py-3 text-slate-500 text-xs hidden sm:table-cell font-mono">
                           {p.created_at ? format(new Date(p.created_at), 'MMM d, yyyy') : '—'}
                         </td>
-                        <td className="px-5 py-3 hidden lg:table-cell">
-                          {isOnline ? (
-                            <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                              online
-                            </span>
-                          ) : p.last_seen ? (
-                            <span className="text-xs text-slate-600 font-mono">
-                              {format(new Date(p.last_seen), 'MMM d · HH:mm')}
-                            </span>
-                          ) : (
-                            <span className="text-xs text-slate-700 font-mono">never</span>
-                          )}
-                        </td>
                         <td className="px-5 py-3">
                           {p.email !== ADMIN_EMAIL && (
                             <button
@@ -374,11 +316,101 @@ export default function Admin() {
                           )}
                         </td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="px-5 py-3 border-t border-white/[0.06] flex items-center justify-between">
+                  <button
+                    onClick={() => setUserPage(p => Math.max(1, p - 1))}
+                    disabled={userPage === 1}
+                    className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg border border-white/10 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft size={14} /> Prev
+                  </button>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(pg => (
+                      <button
+                        key={pg}
+                        onClick={() => setUserPage(pg)}
+                        className={`w-7 h-7 rounded-lg text-xs font-medium transition-colors ${
+                          pg === userPage
+                            ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
+                            : 'text-slate-500 hover:text-white'
+                        }`}
+                      >
+                        {pg}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setUserPage(p => Math.min(totalPages, p + 1))}
+                    disabled={userPage === totalPages}
+                    className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg border border-white/10 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Next <ChevronRight size={14} />
+                  </button>
+                </div>
+              )}
             </div>
+          );
+        })()}
+
+        {/* ── TAB: Premium Users ── */}
+        {tab === 'premium-users' && (
+          <div className="glass rounded-2xl overflow-hidden fade-in">
+            <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+              <h2 className="font-semibold text-white">Premium Users ({profiles.filter(p => p.is_premium).length})</h2>
+            </div>
+            {profiles.filter(p => p.is_premium).length === 0 ? (
+              <div className="p-10 text-center text-slate-500">No premium users yet.</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-xs text-slate-500 border-b border-white/[0.04]">
+                      <th className="text-left px-5 py-3 font-medium">User</th>
+                      <th className="text-left px-5 py-3 font-medium hidden md:table-cell">Role</th>
+                      <th className="text-left px-5 py-3 font-medium hidden sm:table-cell">Joined</th>
+                      <th className="text-left px-5 py-3 font-medium">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.03]">
+                    {profiles.filter(p => p.is_premium).map(p => (
+                      <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="px-5 py-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                              {p.name?.[0] ?? '?'}
+                            </div>
+                            <div>
+                              <p className="text-white font-medium text-xs">{p.name ?? 'Unknown'}</p>
+                              <p className="text-slate-500 text-xs">{p.email}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-5 py-3 text-slate-400 text-xs hidden md:table-cell">{p.curr_role ?? '—'}</td>
+                        <td className="px-5 py-3 text-slate-500 text-xs hidden sm:table-cell font-mono">
+                          {p.created_at ? format(new Date(p.created_at), 'MMM d, yyyy') : '—'}
+                        </td>
+                        <td className="px-5 py-3">
+                          {p.email !== ADMIN_EMAIL && (
+                            <button
+                              onClick={() => toggleUserPremium(p.id, true)}
+                              className="text-xs px-3 py-1.5 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
+                            >
+                              Deactivate
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
