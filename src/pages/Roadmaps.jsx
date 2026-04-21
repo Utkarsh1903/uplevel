@@ -198,7 +198,7 @@ export default function Roadmaps() {
 
                     {/* Locked phase — blurred preview + CTA */}
                     {phLocked && (
-                      <div className="relative border-t border-white/[0.06]">
+                      <div className="relative border-t border-white/[0.06]" style={{ minHeight: '210px' }}>
                         {/* blurred ghost of steps */}
                         <div className="px-5 py-3 space-y-3 select-none pointer-events-none" style={{ filter: 'blur(4px)', opacity: 0.35 }}>
                           {phase.steps.slice(0, 3).map(step => (
