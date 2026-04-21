@@ -28,8 +28,8 @@ const FEATURES = [
   },
   {
     emoji: '🗺️', color: '#6366f1', label: 'Career Roadmaps',
-    desc: '5 structured paths — SDE-2, Frontend, Backend, DevOps, and Data Analyst. Phase-by-phase, week-by-week.',
-    tag: 'free',
+    desc: '5 structured paths — SDE-2, Frontend, Backend, DevOps, and Data Analyst. First 2 phases free to try. Full roadmaps unlocked with Premium.',
+    tag: 'premium',
   },
   {
     emoji: '📖', color: '#8b5cf6', label: 'In-App Articles',
@@ -305,7 +305,7 @@ export default function Landing() {
             <ul className="space-y-2.5 text-sm mb-6">
               {[
                 'DSA Tracker — 120+ topics',
-                'Career Roadmaps — 5 tracks',
+                'Career Roadmaps — first 2 phases (try free)',
                 '66+ in-app learning articles',
                 'Grind Room & daily streaks',
                 'LeetCode integration',
@@ -332,6 +332,7 @@ export default function Landing() {
             <ul className="space-y-2.5 text-sm mb-6">
               {[
                 'Everything in Free',
+                'Full Career Roadmaps — all phases unlocked',
                 'Interview Prep Vault',
                 'HLD Cheatsheets (10+ systems)',
                 'STAR Story Templates',
