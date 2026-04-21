@@ -18,6 +18,7 @@ import Admin         from './pages/Admin';
 import GrindRoom     from './pages/GrindRoom';
 import ArticlePage   from './pages/ArticlePage';
 import Leaderboard      from './pages/Leaderboard';
+import GameZone        from './pages/GameZone';
 import TermsOfService  from './pages/TermsOfService';
 import PrivacyPolicy   from './pages/PrivacyPolicy';
 
@@ -61,6 +62,7 @@ export default function App() {
         <Route path="admin"          element={<Admin />} />
         <Route path="grind-room"     element={<GrindRoom />} />
         <Route path="leaderboard"    element={<Leaderboard />} />
+        <Route path="game-zone"      element={<GameZone />} />
         <Route path="learn/:slug"    element={<ArticlePage />} />
       </Route>
 

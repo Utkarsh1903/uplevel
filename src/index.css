@@ -56,6 +56,12 @@ body {
 [data-theme="light"] .border-white\/\[0\.06\] { border-color: rgba(99,102,241,0.1) !important; }
 [data-theme="light"] .border-white\/\[0\.05\] { border-color: rgba(99,102,241,0.08) !important; }
 
+/* ── Game Zone animations ────────────────────────────────────────────────── */
+@keyframes floatUp {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-48px) scale(0.8); }
+}
+
 /* ── Emoji — desaturated to blend with dark UI ───────────────────────────── */
 .emoji {
   display: inline-block;

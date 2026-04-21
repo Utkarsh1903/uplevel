@@ -5,7 +5,7 @@ import Logo from './Logo';
 import {
   LayoutDashboard, Code2, Map, BookOpen, Mic2,
   Sparkles, Settings, LogOut, Menu, X, Sun, Moon,
-  Users, Shield, Flame, Trophy
+  Users, Shield, Flame, Trophy, Gamepad2
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -15,6 +15,7 @@ const NAV = [
   { to: '/dashboard',      icon: LayoutDashboard, label: 'Dashboard'      },
   { to: '/grind-room',     icon: Flame,           label: 'Grind Room'    },
   { to: '/leaderboard',    icon: Trophy,          label: 'Leaderboard'   },
+  { to: '/game-zone',      icon: Gamepad2,        label: 'Game Zone'     },
   { to: '/dsa',            icon: Code2,            label: 'DSA Tracker'   },
   { to: '/roadmaps',       icon: Map,              label: 'Roadmaps'      },
   { to: '/resources',      icon: BookOpen,         label: 'Resources'     },
