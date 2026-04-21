@@ -83,6 +83,7 @@ export default function ArticlePage() {
       {/* Back */}
       <Link
         to="/roadmaps"
+        state={backState}
         className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm transition-colors"
       >
         <ArrowLeft size={14} /> Back to Roadmaps
