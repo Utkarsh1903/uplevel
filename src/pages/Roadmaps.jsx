@@ -93,7 +93,7 @@ export default function Roadmaps() {
                 : 'border-white/10 text-slate-400 hover:text-white hover:border-white/20'
             }`}
           >
-            <span>{t.emoji}</span>
+            <span className="emoji">{t.emoji}</span>
             <span>{t.label}</span>
           </button>
         ))}
@@ -112,7 +112,7 @@ export default function Roadmaps() {
                   : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-white'
               }`}
             >
-              <span>{r.emoji}</span>
+              <span className="emoji">{r.emoji}</span>
               <span className="hidden sm:inline">{r.label}</span>
               {r.premium && !isPremium && <Lock size={12} className="text-amber-400" />}
             </button>
@@ -127,7 +127,7 @@ export default function Roadmaps() {
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-2xl">{roadmap.emoji}</span>
+                  <span className="emoji text-2xl">{roadmap.emoji}</span>
                   <h2 className="text-lg font-bold text-white">{roadmap.label}</h2>
                   {roadmap.premium && !isPremium && (
                     <span className="badge" style={{ background: 'rgba(251,191,36,0.1)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.3)', fontSize: '0.6rem' }}>PRO</span>

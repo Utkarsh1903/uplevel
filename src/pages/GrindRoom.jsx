@@ -186,7 +186,7 @@ export default function GrindRoom() {
           <div className="space-y-3">
             {focusCounts.map(f => (
               <div key={f.id} className="flex items-center gap-3">
-                <span className="text-lg w-7 shrink-0">{f.emoji}</span>
+                <span className="emoji text-lg w-7 shrink-0">{f.emoji}</span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm text-slate-300">{f.label}</span>
@@ -230,7 +230,7 @@ export default function GrindRoom() {
                     : 'border-white/10 text-slate-400 hover:text-white hover:border-white/20'
                 }`}
               >
-                <span className="text-base">{f.emoji}</span>
+                <span className="emoji text-base">{f.emoji}</span>
                 <span className="truncate">{f.label}</span>
               </button>
             ))}
@@ -252,7 +252,7 @@ export default function GrindRoom() {
                 className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
                 style={{ background: `${activeFocus.color}20`, border: `1px solid ${activeFocus.color}40` }}
               >
-                {activeFocus.emoji}
+                <span className="emoji">{activeFocus.emoji}</span>
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">{activeFocus.label}</p>
@@ -283,7 +283,7 @@ export default function GrindRoom() {
                       : 'border-white/10 text-slate-500 hover:text-white hover:border-white/20'
                   }`}
                 >
-                  {f.emoji} {f.label}
+                  <span className="emoji">{f.emoji}</span> {f.label}
                 </button>
               ))}
             </div>

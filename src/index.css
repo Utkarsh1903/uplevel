@@ -56,6 +56,13 @@ body {
 [data-theme="light"] .border-white\/\[0\.06\] { border-color: rgba(99,102,241,0.1) !important; }
 [data-theme="light"] .border-white\/\[0\.05\] { border-color: rgba(99,102,241,0.08) !important; }
 
+/* ── Emoji — desaturated to blend with dark UI ───────────────────────────── */
+.emoji {
+  display: inline-block;
+  filter: grayscale(1) brightness(1.4);
+  opacity: 0.75;
+}
+
 /* ── Scrollbar ───────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }

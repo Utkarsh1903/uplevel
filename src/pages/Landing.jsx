@@ -249,7 +249,7 @@ export default function Landing() {
                   {tag === 'premium' ? '✦ premium' : '✓ free'}
                 </span>
               </div>
-              <div className="text-3xl mb-4">{emoji}</div>
+              <div className="emoji text-3xl mb-4">{emoji}</div>
               <h3 className="text-white font-semibold mb-2">{label}</h3>
               <p className="text-sm leading-relaxed" style={{ color: 'var(--c-text-2)' }}>{desc}</p>
             </div>

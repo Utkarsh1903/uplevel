@@ -255,7 +255,7 @@ export default function Dashboard() {
             const catPct  = Math.round((catDone / cat.topics.length) * 100);
             return (
               <div key={cat.id} className="text-center p-2 glass rounded-xl">
-                <div className="text-lg mb-1">{cat.emoji}</div>
+                <div className="emoji text-lg mb-1">{cat.emoji}</div>
                 <div className="text-xs text-slate-400 mb-1 truncate">{cat.label.split(' ')[0]}</div>
                 <div className="text-xs font-bold" style={{ color: cat.color }}>{catPct}%</div>
               </div>
@@ -349,7 +349,7 @@ export default function Dashboard() {
                     : 'border-white/10 text-slate-400 hover:border-white/20'
                 }`}
               >
-                {m.emoji} {m.label}
+                <span className="emoji">{m.emoji}</span> {m.label}
               </button>
             ))}
           </div>

@@ -144,7 +144,7 @@ export default function DSATracker() {
             {/* Category header */}
             <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-xl">{cat.emoji}</span>
+                <span className="emoji text-xl">{cat.emoji}</span>
                 <div>
                   <h2 className="font-semibold text-white">{cat.label}</h2>
                   <p className="text-xs text-slate-500">{catDone} / {cat.topics.length} done</p>

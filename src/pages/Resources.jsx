@@ -117,7 +117,7 @@ export default function Resources() {
                 : 'border-white/10 text-slate-400 hover:text-white hover:border-white/20'
             }`}
           >
-            <span>{t.emoji}</span>
+            <span className="emoji">{t.emoji}</span>
             <span>{t.label}</span>
           </button>
         ))}
@@ -161,7 +161,7 @@ export default function Resources() {
             displayed.map(cat => (
               <div key={cat.id}>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xl">{cat.emoji}</span>
+                  <span className="emoji text-xl">{cat.emoji}</span>
                   <h2 className="font-semibold text-white">{cat.label}</h2>
                   <span className="text-slate-500 text-sm">({cat.resources.length})</span>
                 </div>
