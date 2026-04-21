@@ -8,7 +8,7 @@ import {
   Users, Briefcase,
   CheckCircle2, XCircle, Plus, Trash2,
   RefreshCw, ArrowLeft, Shield, Sparkles, Phone,
-  Mail, Linkedin, ExternalLink, Star, ChevronLeft, ChevronRight
+  Mail, Linkedin, ExternalLink, Star, ChevronLeft, ChevronRight, Search
 } from 'lucide-react';
 
 const ADMIN_EMAIL = 'sri.utkarsh1903@gmail.com';
@@ -58,6 +58,7 @@ export default function Admin() {
   const [stats, setStats]           = useState({});
 
   const [userPage, setUserPage] = useState(1);
+  const [userSearch, setUserSearch] = useState('');
   const USERS_PER_PAGE = 20;
 
   const [showAddPro, setShowAddPro] = useState(false);
@@ -240,7 +241,7 @@ export default function Admin() {
           {TABS.map(({ id, label, icon: Icon, badge }) => (
             <button
               key={id}
-              onClick={() => setTab(id)}
+              onClick={() => { setTab(id); setUserSearch(''); setUserPage(1); }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border transition-all ${
                 tab === id
                   ? 'border-indigo-500 bg-indigo-500/20 text-indigo-300'
@@ -259,13 +260,27 @@ export default function Admin() {
 
         {/* ── TAB: Users ── */}
         {tab === 'overview' && (() => {
-          const totalPages      = Math.ceil(profiles.length / USERS_PER_PAGE);
-          const paginated       = profiles.slice((userPage - 1) * USERS_PER_PAGE, userPage * USERS_PER_PAGE);
+          const filtered   = profiles.filter(p =>
+            !userSearch ||
+            p.name?.toLowerCase().includes(userSearch.toLowerCase()) ||
+            p.email?.toLowerCase().includes(userSearch.toLowerCase())
+          );
+          const totalPages = Math.ceil(filtered.length / USERS_PER_PAGE);
+          const paginated  = filtered.slice((userPage - 1) * USERS_PER_PAGE, userPage * USERS_PER_PAGE);
           return (
             <div className="glass rounded-2xl overflow-hidden fade-in">
-              <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
-                <h2 className="font-semibold text-white">All Users ({profiles.length})</h2>
-                <span className="text-xs text-slate-500 font-mono">page {userPage} of {totalPages}</span>
+              <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between gap-4 flex-wrap">
+                <h2 className="font-semibold text-white">All Users ({filtered.length}{userSearch ? ` of ${profiles.length}` : ''})</h2>
+                <div className="relative">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <input
+                    type="text"
+                    placeholder="Search by name or email…"
+                    value={userSearch}
+                    onChange={e => { setUserSearch(e.target.value); setUserPage(1); }}
+                    className="input pl-8 py-1.5 text-xs w-56"
+                  />
+                </div>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -359,13 +374,31 @@ export default function Admin() {
         })()}
 
         {/* ── TAB: Premium Users ── */}
-        {tab === 'premium-users' && (
+        {tab === 'premium-users' && (() => {
+          const premiumFiltered = profiles.filter(p =>
+            p.is_premium && (
+              !userSearch ||
+              p.name?.toLowerCase().includes(userSearch.toLowerCase()) ||
+              p.email?.toLowerCase().includes(userSearch.toLowerCase())
+            )
+          );
+          return (
           <div className="glass rounded-2xl overflow-hidden fade-in">
-            <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
-              <h2 className="font-semibold text-white">Premium Users ({profiles.filter(p => p.is_premium).length})</h2>
+            <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between gap-4 flex-wrap">
+              <h2 className="font-semibold text-white">Premium Users ({premiumFiltered.length}{userSearch ? ` of ${profiles.filter(p => p.is_premium).length}` : ''})</h2>
+              <div className="relative">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="text"
+                  placeholder="Search by name or email…"
+                  value={userSearch}
+                  onChange={e => setUserSearch(e.target.value)}
+                  className="input pl-8 py-1.5 text-xs w-56"
+                />
+              </div>
             </div>
-            {profiles.filter(p => p.is_premium).length === 0 ? (
-              <div className="p-10 text-center text-slate-500">No premium users yet.</div>
+            {premiumFiltered.length === 0 ? (
+              <div className="p-10 text-center text-slate-500">{userSearch ? 'No users match your search.' : 'No premium users yet.'}</div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -378,7 +411,7 @@ export default function Admin() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/[0.03]">
-                    {profiles.filter(p => p.is_premium).map(p => (
+                    {premiumFiltered.map(p => (
                       <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
                         <td className="px-5 py-3">
                           <div className="flex items-center gap-3">
@@ -412,7 +445,8 @@ export default function Admin() {
               </div>
             )}
           </div>
-        )}
+          );
+        })()}
 
         {/* ── TAB: Premium Requests ── */}
         {tab === 'premium-reqs' && (
