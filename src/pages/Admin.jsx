@@ -126,7 +126,7 @@ export default function Admin() {
 
     setStats({
       totalUsers:      allProfiles.length,
-      activeToday:     todayLogs.length,
+      activeToday:     0, // updated by presence poll after 3s
       onlineNow,
       pendingMentors,
       pendingPremiums,
