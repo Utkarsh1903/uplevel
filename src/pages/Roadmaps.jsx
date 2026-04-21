@@ -210,11 +210,11 @@ export default function Roadmaps() {
                         </div>
                         {/* overlay CTA */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="glass rounded-2xl px-6 py-5 text-center mx-4" style={{ border: '1px solid rgba(251,191,36,0.3)' }}>
+                          <div className="glass rounded-2xl px-5 py-5 text-center" style={{ border: '1px solid rgba(251,191,36,0.3)', minWidth: '220px' }}>
                             <Lock size={20} className="text-amber-400 mx-auto mb-2" />
                             <p className="text-white text-sm font-semibold mb-0.5">Premium phase</p>
                             <p className="text-slate-400 text-xs mb-3">Unlock all phases for ₹499 — one-time, forever.</p>
-                            <a href="/premium" className="btn-primary text-xs px-4 py-1.5 inline-flex items-center gap-1.5">
+                            <a href="/premium" className="btn-primary text-xs px-4 py-1.5 inline-flex items-center gap-1.5 whitespace-nowrap">
                               <Sparkles size={11} /> Unlock ₹499
                             </a>
                           </div>

@@ -17,7 +17,7 @@ export const ROADMAPS = [
     description: 'The complete path to crack SDE-2 at Amazon, Flipkart, Swiggy, or Zomato',
     duration: '4–6 months',
     premium: false,
-    freePhases: 1,
+    freePhases: 2,
     phases: [
       {
         id: 'foundation',
@@ -198,7 +198,7 @@ export const ROADMAPS = [
     description: 'Become a frontend specialist — React, performance, and system design',
     duration: '3–5 months',
     premium: false,
-    freePhases: 1,
+    freePhases: 2,
     phases: [
       {
         id: 'js-mastery',
@@ -350,7 +350,7 @@ export const ROADMAPS = [
     description: 'Build robust backend systems — APIs, databases, and microservices',
     duration: '4–6 months',
     premium: false,
-    freePhases: 1,
+    freePhases: 2,
     phases: [
       {
         id: 'backend-foundation',
@@ -498,7 +498,7 @@ export const ROADMAPS = [
     description: 'From zero to job-ready DevOps engineer — Linux, Docker, K8s, AWS, Terraform, CI/CD',
     duration: '6–8 months',
     premium: false,
-    freePhases: 1,
+    freePhases: 2,
     phases: [
       {
         id: 'devops-linux',
@@ -788,7 +788,7 @@ export const ROADMAPS = [
     description: 'From service company to data analyst at a product firm — SQL, Python, dashboards, and storytelling',
     duration: '4–5 months',
     premium: false,
-    freePhases: 1,
+    freePhases: 2,
     phases: [
       {
         id: 'da-sql',
