@@ -5,7 +5,8 @@ import { supabase } from '../lib/supabase';
 import { ROADMAPS } from '../lib/roadmaps';
 import { TRACKS } from '../lib/resources';
 import toast from 'react-hot-toast';
-import { ChevronDown, ChevronUp, Lock, Play, FileText, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ChevronDown, ChevronUp, Lock, Play, FileText, ExternalLink, BookOpen } from 'lucide-react';
 
 // Roadmap tracks (exclude 'all' — we show all by default when no track selected)
 const ROADMAP_TRACKS = TRACKS.filter(t => t.id !== 'all');
@@ -207,26 +208,41 @@ export default function Roadmaps() {
                                       className="flex flex-wrap gap-1.5 mt-2"
                                       onClick={e => e.stopPropagation()}
                                     >
-                                      {step.resources.map((res, i) => (
-                                        <a
-                                          key={i}
-                                          href={res.url}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium transition-colors hover:opacity-90"
-                                          style={res.type === 'video'
-                                            ? { background: 'rgba(236,72,153,0.12)', color: '#f472b6', border: '1px solid rgba(236,72,153,0.2)' }
-                                            : { background: 'rgba(99,102,241,0.12)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.2)' }
-                                          }
-                                        >
-                                          {res.type === 'video'
-                                            ? <Play size={9} fill="currentColor" />
-                                            : <FileText size={9} />
-                                          }
-                                          {res.label}
-                                          <ExternalLink size={8} className="opacity-60" />
-                                        </a>
-                                      ))}
+                                      {step.resources.map((res, i) => {
+                                        if (res.type === 'article') {
+                                          return (
+                                            <Link
+                                              key={i}
+                                              to={res.url}
+                                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium transition-colors hover:opacity-90"
+                                              style={{ background: 'rgba(16,185,129,0.12)', color: '#6ee7b7', border: '1px solid rgba(16,185,129,0.2)' }}
+                                            >
+                                              <BookOpen size={9} />
+                                              {res.label}
+                                            </Link>
+                                          );
+                                        }
+                                        return (
+                                          <a
+                                            key={i}
+                                            href={res.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium transition-colors hover:opacity-90"
+                                            style={res.type === 'video'
+                                              ? { background: 'rgba(236,72,153,0.12)', color: '#f472b6', border: '1px solid rgba(236,72,153,0.2)' }
+                                              : { background: 'rgba(99,102,241,0.12)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.2)' }
+                                            }
+                                          >
+                                            {res.type === 'video'
+                                              ? <Play size={9} fill="currentColor" />
+                                              : <FileText size={9} />
+                                            }
+                                            {res.label}
+                                            <ExternalLink size={8} className="opacity-60" />
+                                          </a>
+                                        );
+                                      })}
                                     </div>
                                   )}
                                 </div>
