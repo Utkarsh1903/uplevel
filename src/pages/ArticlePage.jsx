@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { ARTICLES } from '../lib/articles';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft, Clock, BookOpen } from 'lucide-react';
@@ -59,6 +59,8 @@ const components = {
 
 export default function ArticlePage() {
   const { slug } = useParams();
+  const location = useLocation();
+  const backState = location.state ?? {};
   const article = ARTICLES.find(a => a.slug === slug);
 
   usePageTitle(article?.title ?? 'Article');
@@ -66,7 +68,7 @@ export default function ArticlePage() {
   if (!article) {
     return (
       <div className="max-w-3xl mx-auto space-y-6 fade-in">
-        <Link to="/roadmaps" className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm transition-colors">
+        <Link to="/roadmaps" state={backState} className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm transition-colors">
           <ArrowLeft size={14} /> Back to Roadmaps
         </Link>
         <div className="glass rounded-2xl p-12 text-center">
@@ -120,6 +122,7 @@ export default function ArticlePage() {
         <p className="text-slate-500 text-xs font-mono">// written by UpLevel · no external redirects needed</p>
         <Link
           to="/roadmaps"
+          state={backState}
           className="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 text-sm mt-2 transition-colors"
         >
           <ArrowLeft size={13} /> Back to your roadmap

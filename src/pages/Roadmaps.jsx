@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase';
 import { ROADMAPS } from '../lib/roadmaps';
 import { TRACKS } from '../lib/resources';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Lock, Play, FileText, ExternalLink, BookOpen } from 'lucide-react';
 
 // Roadmap tracks (exclude 'all' — we show all by default when no track selected)
@@ -14,11 +14,13 @@ const ROADMAP_TRACKS = TRACKS.filter(t => t.id !== 'all');
 export default function Roadmaps() {
   usePageTitle('Career Roadmaps');
   const { user, isPremium } = useAuth();
-  const [progress, setProgress]     = useState({});
-  const [expanded, setExpanded]     = useState({ 'sde2-product': true });
-  const [selected, setSelected]     = useState('sde2-product');
-  const [activeTrack, setActiveTrack] = useState('sde');
-  const [saving, setSaving]         = useState(null);
+  const location = useLocation();
+  // Restore context when returning from an article page
+  const [progress, setProgress]       = useState({});
+  const [expanded, setExpanded]       = useState(() => ({ [location.state?.roadmapId ?? 'sde2-product']: true }));
+  const [selected, setSelected]       = useState(() => location.state?.roadmapId ?? 'sde2-product');
+  const [activeTrack, setActiveTrack] = useState(() => location.state?.trackId   ?? 'sde');
+  const [saving, setSaving]           = useState(null);
 
   useEffect(() => { if (user) load(); }, [user]);
 
@@ -214,6 +216,7 @@ export default function Roadmaps() {
                                             <Link
                                               key={i}
                                               to={res.url}
+                                              state={{ roadmapId: roadmap.id, trackId: activeTrack }}
                                               className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium transition-colors hover:opacity-90"
                                               style={{ background: 'rgba(16,185,129,0.12)', color: '#6ee7b7', border: '1px solid rgba(16,185,129,0.2)' }}
                                             >
