@@ -17,7 +17,9 @@ import FeaturedForm  from './pages/FeaturedForm';
 import Admin         from './pages/Admin';
 import GrindRoom     from './pages/GrindRoom';
 import ArticlePage   from './pages/ArticlePage';
-import Leaderboard   from './pages/Leaderboard';
+import Leaderboard      from './pages/Leaderboard';
+import TermsOfService  from './pages/TermsOfService';
+import PrivacyPolicy   from './pages/PrivacyPolicy';
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
@@ -43,6 +45,8 @@ export default function App() {
       <Route path="/auth" element={user ? <Navigate to="/dashboard" replace /> : <Auth />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
       <Route path="/get-featured"  element={<FeaturedForm />} />
+      <Route path="/terms"         element={<TermsOfService />} />
+      <Route path="/privacy"       element={<PrivacyPolicy />} />
 
       {/* Protected routes */}
       <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>

@@ -428,7 +428,12 @@ export default function Landing() {
               Pranjal Srivastava
             </a>
           </p>
-          <p style={{ color: 'var(--c-text-3)', opacity: 0.5 }}>© 2025 UpLevel · Zero infra cost · 100% honest</p>
+          <div className="flex items-center justify-center gap-4 mt-1">
+            <a href="/terms" className="text-slate-600 hover:text-indigo-400 transition-colors">Terms of Service</a>
+            <span className="text-slate-700">·</span>
+            <a href="/privacy" className="text-slate-600 hover:text-indigo-400 transition-colors">Privacy Policy</a>
+          </div>
+          <p style={{ color: 'var(--c-text-3)', opacity: 0.5 }}>© 2025 UpLevel · 100% honest</p>
         </div>
       </footer>
     </div>

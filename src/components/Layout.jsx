@@ -103,6 +103,13 @@ export default function Layout() {
         </button>
       </div>
 
+      {/* Legal links */}
+      <div className="px-4 pb-2 flex gap-3 text-xs" style={{ color: 'var(--c-text-3)' }}>
+        <a href="/terms"   className="hover:text-indigo-400 transition-colors">Terms</a>
+        <span>·</span>
+        <a href="/privacy" className="hover:text-indigo-400 transition-colors">Privacy</a>
+      </div>
+
       {/* Profile chip */}
       <div className="mx-3 mb-4 p-3 glass rounded-xl flex items-center gap-3">
         {profile?.avatar_url
