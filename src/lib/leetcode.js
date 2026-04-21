@@ -1,15 +1,22 @@
 import { supabase } from './supabase';
 
 /**
- * Call the Supabase Edge Function which proxies LeetCode's GraphQL API.
+ * Call the Vercel API route which proxies LeetCode's GraphQL API server-side.
  * Returns { easy, medium, hard, rating, ranking, username }
  */
 export async function fetchLeetCodeStats(username) {
-  const { data, error } = await supabase.functions.invoke('fetch-leetcode', {
-    body: { username: username.trim() },
+  const res = await fetch('/api/leetcode', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: username.trim() }),
   });
-  if (error) throw new Error(error.message ?? 'Edge function error');
-  if (data?.error) throw new Error(data.error);
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.error ?? 'Failed to fetch LeetCode stats');
+  }
+
   return data;
 }
 
