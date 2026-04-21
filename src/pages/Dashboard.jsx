@@ -13,7 +13,7 @@ import {
 import {
   Flame, Code2, CheckCircle2, BookOpen,
   TrendingUp, ChevronRight, Sparkles, History,
-  CalendarDays,
+  CalendarDays, Trophy,
 } from 'lucide-react';
 
 const MOODS = [
@@ -55,6 +55,7 @@ export default function Dashboard() {
   const [loading, setLoading]         = useState(true);
   const [pastLogs, setPastLogs]       = useState([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [leaderRank, setLeaderRank]   = useState(null);
 
   const today = format(new Date(), 'yyyy-MM-dd');
 
@@ -64,13 +65,14 @@ export default function Dashboard() {
     setLoading(true);
     const thirtyDaysAgo = format(subDays(new Date(), 29), 'yyyy-MM-dd');
 
-    const [progRes, logRes, logsRes] = await Promise.all([
+    const [progRes, logRes, logsRes, lbRes] = await Promise.all([
       supabase.from('dsa_progress').select('topic_id, status').eq('user_id', user.id),
       supabase.from('daily_logs').select('*').eq('user_id', user.id).eq('date', today).maybeSingle(),
       supabase.from('daily_logs').select('*')
         .eq('user_id', user.id)
         .gte('date', thirtyDaysAgo)
         .order('date', { ascending: false }),
+      supabase.from('leaderboard_view').select('user_id,score').order('score', { ascending: false }).limit(100),
     ]);
 
     if (progRes.data) {
@@ -90,6 +92,10 @@ export default function Dashboard() {
     if (logsRes.data) {
       setPastLogs(logsRes.data);
       setStreak(calcStreak(logsRes.data.map(r => r.date)));
+    }
+    if (lbRes.data) {
+      const rank = lbRes.data.findIndex(r => r.user_id === user.id) + 1;
+      setLeaderRank(rank > 0 ? rank : null);
     }
     setLoading(false);
   }
@@ -177,6 +183,60 @@ export default function Dashboard() {
         <StatCard icon={<BookOpen size={20} className="text-indigo-400" />}                value={learning}        label="In progress"   color="#6366f1" />
         <StatCard icon={<TrendingUp size={20} className="text-amber-400" />}               value={`${pct}%`}       label="DSA mastery"   color="#f59e0b" />
       </div>
+
+      {/* LeetCode + Leaderboard row */}
+      {(profile?.leetcode_username || leaderRank) && (
+        <div className="grid sm:grid-cols-2 gap-4">
+          {profile?.leetcode_username && (
+            <div className="glass rounded-2xl p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Code2 size={15} className="text-amber-400" />
+                  <span className="text-sm font-semibold text-white">LeetCode</span>
+                </div>
+                <span className="text-xs text-slate-500 font-mono">@{profile.leetcode_username}</span>
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-1 text-center">
+                  <div className="text-xl font-extrabold" style={{ color: '#4ade80' }}>{profile.leetcode_easy ?? 0}</div>
+                  <div className="text-xs text-slate-500 mt-0.5">Easy</div>
+                </div>
+                <div className="flex-1 text-center">
+                  <div className="text-xl font-extrabold" style={{ color: '#fb923c' }}>{profile.leetcode_medium ?? 0}</div>
+                  <div className="text-xs text-slate-500 mt-0.5">Medium</div>
+                </div>
+                <div className="flex-1 text-center">
+                  <div className="text-xl font-extrabold" style={{ color: '#f87171' }}>{profile.leetcode_hard ?? 0}</div>
+                  <div className="text-xs text-slate-500 mt-0.5">Hard</div>
+                </div>
+                <div className="flex-1 text-center">
+                  <div className="text-xl font-extrabold text-white">
+                    {(profile.leetcode_easy ?? 0) + (profile.leetcode_medium ?? 0) + (profile.leetcode_hard ?? 0)}
+                  </div>
+                  <div className="text-xs text-slate-500 mt-0.5">Total</div>
+                </div>
+              </div>
+            </div>
+          )}
+          {leaderRank && (
+            <div className="glass rounded-2xl p-4 cursor-pointer hover:bg-white/[0.03] transition-colors" onClick={() => navigate('/leaderboard')}>
+              <div className="flex items-center gap-2 mb-3">
+                <Trophy size={15} className="text-amber-400" />
+                <span className="text-sm font-semibold text-white">Your Rank</span>
+              </div>
+              <div className="flex items-end justify-between">
+                <div>
+                  <div className="text-3xl font-extrabold text-white">#{leaderRank}</div>
+                  <div className="text-xs text-slate-400 mt-0.5">on the leaderboard</div>
+                </div>
+                <div className="text-xs text-indigo-400 flex items-center gap-1">
+                  View all <ChevronRight size={12} />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* DSA Progress bar */}
       <div className="glass rounded-2xl p-5">

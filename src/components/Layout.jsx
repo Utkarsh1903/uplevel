@@ -5,7 +5,7 @@ import Logo from './Logo';
 import {
   LayoutDashboard, Code2, Map, BookOpen, Mic2,
   Sparkles, Settings, LogOut, Menu, X, Sun, Moon,
-  Users, Shield, Flame
+  Users, Shield, Flame, Trophy
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -14,6 +14,7 @@ const ADMIN_EMAIL = 'sri.utkarsh1903@gmail.com';
 const NAV = [
   { to: '/dashboard',      icon: LayoutDashboard, label: 'Dashboard'      },
   { to: '/grind-room',     icon: Flame,           label: 'Grind Room'    },
+  { to: '/leaderboard',    icon: Trophy,          label: 'Leaderboard'   },
   { to: '/dsa',            icon: Code2,            label: 'DSA Tracker'   },
   { to: '/roadmaps',       icon: Map,              label: 'Roadmaps'      },
   { to: '/resources',      icon: BookOpen,         label: 'Resources'     },
