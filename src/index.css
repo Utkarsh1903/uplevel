@@ -62,6 +62,25 @@ body {
   to   { opacity: 0; transform: translateY(-48px) scale(0.8); }
 }
 
+/* ── Game Zone sidebar RGB cycling ──────────────────────────────────────── */
+@keyframes rgbNav {
+  0%   { color: #a5b4fc; }
+  17%  { color: #d8b4fe; }
+  34%  { color: #f9a8d4; }
+  50%  { color: #7dd3fc; }
+  67%  { color: #6ee7b7; }
+  84%  { color: #fde68a; }
+  100% { color: #a5b4fc; }
+}
+
+.rgb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex: 1;
+  animation: rgbNav 6s ease-in-out infinite;
+}
+
 /* ── Emoji — desaturated to blend with dark UI ───────────────────────────── */
 .emoji {
   display: inline-block;

@@ -15,7 +15,7 @@ const NAV = [
   { to: '/dashboard',      icon: LayoutDashboard, label: 'Dashboard'      },
   { to: '/grind-room',     icon: Flame,           label: 'Grind Room'    },
   { to: '/leaderboard',    icon: Trophy,          label: 'Leaderboard'   },
-  { to: '/game-zone',      icon: Gamepad2,        label: 'Game Zone'     },
+  { to: '/game-zone',      icon: Gamepad2,        label: 'Game Zone', rgb: true },
   { to: '/dsa',            icon: Code2,            label: 'DSA Tracker'   },
   { to: '/roadmaps',       icon: Map,              label: 'Roadmaps'      },
   { to: '/resources',      icon: BookOpen,         label: 'Resources'     },
@@ -52,17 +52,26 @@ export default function Layout() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        {NAV.map(({ to, icon: Icon, label, premium }) => (
+        {NAV.map(({ to, icon: Icon, label, premium, rgb }) => (
           <NavLink
             key={to}
             to={to}
             onClick={onClose}
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
           >
-            <Icon size={17} />
-            <span>{label}</span>
-            {premium && !isPremium && (
-              <span className="ml-auto badge" style={{ background: 'rgba(251,191,36,0.1)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.25)', fontSize: '0.6rem' }}>PRO</span>
+            {rgb ? (
+              <span className="rgb-nav">
+                <Icon size={17} />
+                <span>{label}</span>
+              </span>
+            ) : (
+              <>
+                <Icon size={17} />
+                <span>{label}</span>
+                {premium && !isPremium && (
+                  <span className="ml-auto badge" style={{ background: 'rgba(251,191,36,0.1)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.25)', fontSize: '0.6rem' }}>PRO</span>
+                )}
+              </>
             )}
           </NavLink>
         ))}
