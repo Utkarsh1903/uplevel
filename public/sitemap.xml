@@ -3,22 +3,22 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <url>
-    <loc>https://uplevel-sandy.vercel.app/</loc>
+    <loc>https://uplevel.co.in/</loc>
     <lastmod>2025-04-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en-IN" href="https://uplevel-sandy.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://uplevel.co.in/" />
   </url>
 
   <url>
-    <loc>https://uplevel-sandy.vercel.app/auth</loc>
+    <loc>https://uplevel.co.in/auth</loc>
     <lastmod>2025-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://uplevel-sandy.vercel.app/get-featured</loc>
+    <loc>https://uplevel.co.in/get-featured</loc>
     <lastmod>2025-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

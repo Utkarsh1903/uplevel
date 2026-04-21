@@ -14,4 +14,4 @@ Disallow: /settings
 Disallow: /admin
 Disallow: /auth/callback
 
-Sitemap: https://uplevel-sandy.vercel.app/sitemap.xml
+Sitemap: https://uplevel.co.in/sitemap.xml
