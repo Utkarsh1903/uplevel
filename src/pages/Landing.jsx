@@ -111,6 +111,14 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-mesh" style={{ color: 'var(--c-text-1)' }}>
 
+      {/* Offer banner */}
+      <div className="w-full py-2.5 px-4 text-center text-xs font-semibold" style={{ background: 'linear-gradient(90deg, rgba(251,191,36,0.15), rgba(245,158,11,0.1), rgba(251,191,36,0.15))', borderBottom: '1px solid rgba(251,191,36,0.2)' }}>
+        <span className="text-amber-300">Limited offer —</span>
+        <span className="text-white"> first 100 users get lifetime Premium </span>
+        <span className="text-amber-400 font-bold">FREE.</span>
+        <span className="text-slate-400"> No catch. Request it after signing up.</span>
+      </div>
+
       {/* Navbar */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-2.5">
@@ -320,7 +328,7 @@ export default function Landing() {
               <h3 className="gradient-text-gold font-bold text-xl">Premium</h3>
               <span className="badge font-mono" style={{ background: 'rgba(251,191,36,0.1)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.3)' }}>BEST VALUE</span>
             </div>
-            <p className="text-3xl font-extrabold text-white mb-5 font-mono">₹99 <span className="text-sm font-normal" style={{ color: 'var(--c-text-3)' }}>/month</span></p>
+            <p className="text-3xl font-extrabold text-white mb-5 font-mono">₹499 <span className="text-sm font-normal" style={{ color: 'var(--c-text-3)' }}>one-time · forever</span></p>
             <ul className="space-y-2.5 text-sm mb-6">
               {[
                 'Everything in Free',

@@ -457,7 +457,7 @@ export default function Dashboard() {
                 <Sparkles size={16} className="text-amber-400" />
                 <h3 className="font-semibold text-white">Unlock Interview Prep Vault</h3>
               </div>
-              <p className="text-slate-400 text-sm">HLD cheatsheets, STAR story templates, salary negotiation scripts. Just ₹99/month.</p>
+              <p className="text-slate-400 text-sm">Full roadmaps, Interview Prep Vault, HLD cheatsheets, STAR templates. ₹499 one-time — first 100 users get it free.</p>
             </div>
             <button onClick={() => navigate('/premium')} className="btn-primary shrink-0 whitespace-nowrap">Upgrade</button>
           </div>

@@ -106,7 +106,7 @@ export default function Settings() {
           <p className="text-slate-400 text-sm">{user?.email}</p>
           <p className="text-xs mt-1">{isPremium
             ? <span className="text-amber-400 font-semibold">✨ Premium member</span>
-            : <span className="text-slate-500">Free plan · <a href="/premium" className="text-indigo-400 hover:underline">Upgrade</a></span>
+            : <span className="text-slate-500">Free plan · <a href="/premium" className="text-indigo-400 hover:underline">Upgrade — ₹499 one-time</a></span>
           }</p>
         </div>
       </div>

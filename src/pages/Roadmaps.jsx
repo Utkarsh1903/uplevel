@@ -6,7 +6,7 @@ import { ROADMAPS } from '../lib/roadmaps';
 import { TRACKS } from '../lib/resources';
 import toast from 'react-hot-toast';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Lock, Play, FileText, ExternalLink, BookOpen } from 'lucide-react';
+import { ChevronDown, ChevronUp, Lock, Play, FileText, ExternalLink, BookOpen, Sparkles } from 'lucide-react';
 
 // Roadmap tracks (exclude 'all' — we show all by default when no track selected)
 const ROADMAP_TRACKS = TRACKS.filter(t => t.id !== 'all');
@@ -151,39 +151,79 @@ export default function Roadmaps() {
             <div className="glass rounded-2xl p-10 text-center border border-amber-500/20">
               <Lock size={32} className="text-amber-400 mx-auto mb-4" />
               <h3 className="text-white font-bold text-lg mb-2">Premium Roadmap</h3>
-              <p className="text-slate-400 text-sm mb-6">This roadmap is available for Premium members. Upgrade for just ₹99/month.</p>
-              <a href="/premium" className="btn-primary inline-flex">Unlock for ₹99/mo</a>
+              <p className="text-slate-400 text-sm mb-6">This roadmap is available for Premium members. Upgrade for ₹499 one-time — pay once, access forever.</p>
+              <a href="/premium" className="btn-primary inline-flex">Unlock — ₹499 one-time</a>
             </div>
           ) : (
             <div className="space-y-4">
               {roadmap.phases.map((phase, idx) => {
-                const phDone = phase.steps.filter(s => roadmapProg[s.id]).length;
-                const isOpen = expanded[phase.id] !== false;
+                const phDone      = phase.steps.filter(s => roadmapProg[s.id]).length;
+                const isOpen      = expanded[phase.id] !== false;
+                const freePhases  = roadmap.freePhases ?? roadmap.phases.length;
+                const phLocked    = !isPremium && idx >= freePhases;
+
                 return (
                   <div key={phase.id} className="glass rounded-2xl overflow-hidden">
+                    {/* Phase header — always visible */}
                     <button
-                      onClick={() => setExpanded(e => ({ ...e, [phase.id]: !isOpen }))}
-                      className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors"
+                      onClick={() => !phLocked && setExpanded(e => ({ ...e, [phase.id]: !isOpen }))}
+                      className={`w-full px-5 py-4 flex items-center justify-between text-left transition-colors ${phLocked ? 'cursor-default opacity-60' : 'hover:bg-white/[0.02]'}`}
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white"
                           style={{ background: phase.color + '30', border: `1px solid ${phase.color}40` }}>
-                          {idx + 1}
+                          {phLocked ? <Lock size={14} /> : idx + 1}
                         </div>
                         <div>
-                          <div className="font-semibold text-white">{phase.label}</div>
-                          <div className="text-xs text-slate-500">Week {phase.weeks} · {phDone}/{phase.steps.length} done</div>
+                          <div className="font-semibold text-white flex items-center gap-2">
+                            {phase.label}
+                            {phLocked && (
+                              <span className="text-xs font-normal px-1.5 py-0.5 rounded-md" style={{ background: 'rgba(251,191,36,0.1)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.25)' }}>
+                                Premium
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-xs text-slate-500">Week {phase.weeks} · {phase.steps.length} steps</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <div className="progress-track h-1.5 w-16">
-                          <div className="progress-fill h-1.5" style={{ width: `${Math.round((phDone/phase.steps.length)*100)}%`, background: phase.color }} />
-                        </div>
-                        {isOpen ? <ChevronUp size={16} className="text-slate-500" /> : <ChevronDown size={16} className="text-slate-500" />}
+                        {!phLocked && (
+                          <div className="progress-track h-1.5 w-16">
+                            <div className="progress-fill h-1.5" style={{ width: `${Math.round((phDone/phase.steps.length)*100)}%`, background: phase.color }} />
+                          </div>
+                        )}
+                        {!phLocked && (isOpen ? <ChevronUp size={16} className="text-slate-500" /> : <ChevronDown size={16} className="text-slate-500" />)}
                       </div>
                     </button>
 
-                    {isOpen && (
+                    {/* Locked phase — blurred preview + CTA */}
+                    {phLocked && (
+                      <div className="relative border-t border-white/[0.06]">
+                        {/* blurred ghost of steps */}
+                        <div className="px-5 py-3 space-y-3 select-none pointer-events-none" style={{ filter: 'blur(4px)', opacity: 0.35 }}>
+                          {phase.steps.slice(0, 3).map(step => (
+                            <div key={step.id} className="flex items-center gap-3">
+                              <div className="w-4 h-4 rounded border border-white/20 shrink-0" />
+                              <div className="h-3 rounded bg-white/10 flex-1" />
+                            </div>
+                          ))}
+                        </div>
+                        {/* overlay CTA */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="glass rounded-2xl px-6 py-5 text-center mx-4" style={{ border: '1px solid rgba(251,191,36,0.3)' }}>
+                            <Lock size={20} className="text-amber-400 mx-auto mb-2" />
+                            <p className="text-white text-sm font-semibold mb-0.5">Premium phase</p>
+                            <p className="text-slate-400 text-xs mb-3">Unlock all phases for ₹499 — one-time, forever.</p>
+                            <a href="/premium" className="btn-primary text-xs px-4 py-1.5 inline-flex items-center gap-1.5">
+                              <Sparkles size={11} /> Unlock ₹499
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Open free phase — full content */}
+                    {!phLocked && isOpen && (
                       <div className="border-t border-white/[0.06]">
                         {phase.steps.map(step => {
                           const done = roadmapProg[step.id] ?? false;
@@ -206,10 +246,7 @@ export default function Roadmaps() {
                                     {step.label}
                                   </span>
                                   {hasResources && (
-                                    <div
-                                      className="flex flex-wrap gap-1.5 mt-2"
-                                      onClick={e => e.stopPropagation()}
-                                    >
+                                    <div className="flex flex-wrap gap-1.5 mt-2" onClick={e => e.stopPropagation()}>
                                       {step.resources.map((res, i) => {
                                         if (res.type === 'article') {
                                           return (

@@ -11,13 +11,12 @@ export default function PremiumGate({ feature = 'This feature' }) {
       </div>
       <h2 className="text-2xl font-bold text-white mb-2">Premium Feature</h2>
       <p className="text-slate-400 max-w-sm mb-8 leading-relaxed">
-        {feature} is available for UpLevel Premium members. Upgrade for just ₹99/month and unlock
-        your full interview readiness potential.
+        {feature} is available for UpLevel Premium members. Upgrade for ₹499 one-time — pay once, own it forever.
       </p>
       <div className="flex gap-3">
         <button onClick={() => navigate('/premium')} className="btn-primary flex items-center gap-2">
           <Sparkles size={16} />
-          Unlock Premium — ₹99/mo
+          Unlock Premium — ₹499 one-time
         </button>
         <button onClick={() => navigate(-1)} className="btn-ghost">
           Go Back
