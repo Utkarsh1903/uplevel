@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import Logo from '../components/Logo';
-import { ArrowRight, TrendingUp, Users, Sun, Moon, CheckCircle2, Sparkles } from 'lucide-react';
+import { ArrowRight, TrendingUp, Users, Sun, Moon, CheckCircle2, Sparkles, Trophy, Flame, Code2, BookOpen } from 'lucide-react';
 
 const GoogleIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" className="shrink-0">
@@ -15,26 +15,55 @@ const GoogleIcon = () => (
   </svg>
 );
 
-
 const FEATURES = [
   {
+    emoji: '🔥', color: '#f97316', label: 'Grind Room',
+    desc: 'Log your daily session, see how many engineers are grinding right now, and build an unbreakable streak.',
+    tag: 'free',
+  },
+  {
     emoji: '📊', color: '#10b981', label: 'DSA Tracker',
-    desc: '120+ topics across 10 categories. Track every topic from Arrays to DP — click to mark as Learning or Done.',
+    desc: '120+ topics across 10 categories — Arrays, Trees, DP, Graphs and more. Mark Learning or Done, track your mastery.',
     tag: 'free',
   },
   {
     emoji: '🗺️', color: '#6366f1', label: 'Career Roadmaps',
-    desc: 'Phase-by-phase paths for SDE-2, Frontend, Backend and System Design. Know exactly what to do next.',
+    desc: '5 structured paths — SDE-2, Frontend, Backend, DevOps, and Data Analyst. Phase-by-phase, week-by-week.',
+    tag: 'free',
+  },
+  {
+    emoji: '📖', color: '#8b5cf6', label: 'In-App Articles',
+    desc: '66+ deep-dive articles covering every roadmap topic. Read, learn and level up without leaving the app.',
+    tag: 'free',
+  },
+  {
+    emoji: '⚡', color: '#f59e0b', label: 'LeetCode Integration',
+    desc: 'Link your LeetCode profile to sync Easy / Medium / Hard solve counts and show them on the leaderboard.',
+    tag: 'free',
+  },
+  {
+    emoji: '🏆', color: '#eab308', label: 'Community Leaderboard',
+    desc: 'Compete with peers on overall score, DSA topics, grind sessions, and LeetCode solves. Opt-in, privacy-first.',
     tag: 'free',
   },
   {
     emoji: '📚', color: '#ec4899', label: 'Curated Resources',
-    desc: 'The best of Striver, NeetCode, ByteByteGo and more. Handpicked — no noise, no outdated links.',
+    desc: 'The best of Striver, NeetCode, ByteByteGo and more — handpicked per roadmap step, zero noise.',
+    tag: 'free',
+  },
+  {
+    emoji: '👥', color: '#06b6d4', label: 'Mentor Network',
+    desc: "Connect with engineers who've already cracked the switch. Resume reviews, mock interviews, 1-on-1 sessions.",
     tag: 'free',
   },
   {
     emoji: '🎯', color: '#f59e0b', label: 'Interview Prep Vault',
-    desc: 'STAR story templates, HLD cheatsheets for 10+ systems, and salary negotiation scripts that actually work.',
+    desc: 'STAR story templates, HLD cheatsheets for 10+ systems, salary negotiation scripts that actually work.',
+    tag: 'premium',
+  },
+  {
+    emoji: '🧠', color: '#a855f7', label: 'System Design Roadmap',
+    desc: 'A dedicated premium roadmap covering scalability, caching, CAP theorem, databases, and real system designs.',
     tag: 'premium',
   },
 ];
@@ -48,17 +77,20 @@ const STORIES = [
 const TERMINAL_LINES = [
   { text: '$ uplevel --status', color: '#a5b4fc' },
   { text: '', color: '' },
-  { text: '  user      : Utkarsh S.', color: '#94a3b8' },
-  { text: '  target    : SDE-2 @ Amazon', color: '#94a3b8' },
-  { text: '  streak    : 🔥 14 days', color: '#f97316' },
+  { text: '  user        : Utkarsh S.', color: '#94a3b8' },
+  { text: '  target      : SDE-2 @ Amazon', color: '#94a3b8' },
+  { text: '  streak      : 🔥 14 days', color: '#f97316' },
   { text: '', color: '' },
   { text: '  DSA Progress', color: '#e2e8f0' },
-  { text: '  ├─ done       45 / 120  ████████░░░░  38%', color: '#10b981' },
+  { text: '  ├─ done       72 / 120  ██████████░░  60%', color: '#10b981' },
   { text: '  ├─ learning   18        ████░░░░░░░░  15%', color: '#f59e0b' },
-  { text: '  └─ todo       57        remaining', color: '#64748b' },
+  { text: '  └─ todo       30        remaining', color: '#64748b' },
+  { text: '', color: '' },
+  { text: '  LeetCode     : 145E · 89M · 23H', color: '#4ade80' },
+  { text: '  Leaderboard  : #12 overall', color: '#fbbf24' },
   { text: '', color: '' },
   { text: '  Roadmap: SDE-2 at Product Co.', color: '#e2e8f0' },
-  { text: '  Phase 2 of 4 — Core DSA [██████░░] 75%', color: '#6366f1' },
+  { text: '  Phase 3 of 4 — System Design [████████░░] 80%', color: '#6366f1' },
   { text: '', color: '' },
   { text: '> Keep going. You are closer than you think._', color: '#34d399' },
 ];
@@ -74,7 +106,6 @@ export default function Landing() {
     setSigningIn(true);
     const { error } = await signInWithGoogle();
     if (error) setSigningIn(false);
-    // on success Supabase redirects away
   }
 
   return (
@@ -139,26 +170,31 @@ export default function Landing() {
             </p>
             <p className="text-lg mb-8 font-mono text-sm" style={{ color: 'var(--c-text-3)' }}>
               UpLevel gives you the exact system they used.
-              <span className="text-emerald-400"> No fluff. No 40hr courses.</span>
+              <span className="text-emerald-400"> No fluff. No 40hr courses. Everything in one place.</span>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start mb-8">
               <button
-                onClick={() => navigate('/auth')}
-                className="btn-primary text-base px-7 py-3 flex items-center gap-2"
+                onClick={handleGoogleSignIn}
+                disabled={signingIn}
+                className="btn-primary text-base px-7 py-3 flex items-center gap-2 disabled:opacity-60"
               >
-                Start Free — Login with Google
-                <ArrowRight size={16} />
+                {signingIn
+                  ? <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  : <GoogleIcon />
+                }
+                {signingIn ? 'Signing in…' : 'Start Free — Login with Google'}
               </button>
               <p className="text-xs font-mono" style={{ color: 'var(--c-text-3)' }}>
                 $ no_card_required=true · free_forever=true
               </p>
             </div>
 
-            <div className="flex items-center gap-6 text-sm justify-center lg:justify-start" style={{ color: 'var(--c-text-3)' }}>
+            <div className="flex flex-wrap items-center gap-4 text-sm justify-center lg:justify-start" style={{ color: 'var(--c-text-3)' }}>
               <span className="flex items-center gap-1.5 font-mono"><Users size={13} className="text-indigo-400" /> 800+ engineers</span>
-              <span className="flex items-center gap-1.5 font-mono"><TrendingUp size={13} className="text-emerald-400" /> 120+ DSA topics</span>
-              <span className="flex items-center gap-1.5 font-mono"><Sparkles size={13} className="text-amber-400" /> ₹99/mo premium</span>
+              <span className="flex items-center gap-1.5 font-mono"><Code2 size={13} className="text-emerald-400" /> 120+ DSA topics</span>
+              <span className="flex items-center gap-1.5 font-mono"><BookOpen size={13} className="text-purple-400" /> 66+ articles</span>
+              <span className="flex items-center gap-1.5 font-mono"><Trophy size={13} className="text-amber-400" /> leaderboard</span>
             </div>
           </div>
 
@@ -191,8 +227,9 @@ export default function Landing() {
         <div className="text-center mb-10">
           <p className="code-tag text-sm mb-2">// features</p>
           <h2 className="text-2xl font-bold text-white">Everything you need. Nothing you don't.</h2>
+          <p className="text-sm mt-2" style={{ color: 'var(--c-text-3)' }}>One platform. Every tool you need to make the switch.</p>
         </div>
-        <div className="grid sm:grid-cols-2 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {FEATURES.map(({ emoji, color, label, desc, tag }) => (
             <div key={label} className="glass glass-hover rounded-2xl p-6 relative overflow-hidden">
               <div className="absolute top-4 right-4">
@@ -258,7 +295,16 @@ export default function Landing() {
             <h3 className="text-white font-bold text-xl mb-1">Free</h3>
             <p className="text-3xl font-extrabold text-white mb-5 font-mono">₹0 <span className="text-sm font-normal" style={{ color: 'var(--c-text-3)' }}>/forever</span></p>
             <ul className="space-y-2.5 text-sm mb-6">
-              {['DSA Tracker — 120+ topics', 'Career Roadmaps (3 paths)', 'Free Resources Vault', 'Daily Log & Streaks', 'Dashboard & Analytics'].map(f => (
+              {[
+                'DSA Tracker — 120+ topics',
+                'Career Roadmaps — 5 tracks',
+                '66+ in-app learning articles',
+                'Grind Room & daily streaks',
+                'LeetCode integration',
+                'Community Leaderboard',
+                'Curated Resources Vault',
+                'Dashboard & analytics',
+              ].map(f => (
                 <li key={f} className="flex items-center gap-2" style={{ color: 'var(--c-text-2)' }}>
                   <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />{f}
                 </li>
@@ -276,7 +322,15 @@ export default function Landing() {
             </div>
             <p className="text-3xl font-extrabold text-white mb-5 font-mono">₹99 <span className="text-sm font-normal" style={{ color: 'var(--c-text-3)' }}>/month</span></p>
             <ul className="space-y-2.5 text-sm mb-6">
-              {['Everything in Free', 'Interview Prep Vault', 'HLD Cheatsheets (10+ systems)', 'STAR Story Templates', 'Salary Negotiation Scripts', 'System Design Roadmap', 'WhatsApp Support'].map(f => (
+              {[
+                'Everything in Free',
+                'Interview Prep Vault',
+                'HLD Cheatsheets (10+ systems)',
+                'STAR Story Templates',
+                'Salary Negotiation Scripts',
+                'System Design Roadmap',
+                'WhatsApp Support',
+              ].map(f => (
                 <li key={f} className="flex items-center gap-2" style={{ color: 'var(--c-text-2)' }}>
                   <Sparkles size={13} className="text-amber-400 shrink-0" />{f}
                 </li>
@@ -288,7 +342,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Mentors CTA ── */}
+      {/* Mentors CTA */}
       <section className="max-w-3xl mx-auto px-6 pb-20">
         <div className="glass rounded-3xl p-10 text-center" style={{ border: '1px solid rgba(99,102,241,0.2)' }}>
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)' }}>
@@ -323,8 +377,16 @@ export default function Landing() {
             6 months from now, you could be at Amazon, Flipkart, or Swiggy — or still<br />
             in the same seat at the same service company. The difference is starting today.
           </p>
-          <button onClick={() => navigate('/auth')} className="btn-primary text-base px-8 py-3 flex items-center gap-2 mx-auto">
-            Start Free with Google <ArrowRight size={16} />
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={signingIn}
+            className="btn-primary text-base px-8 py-3 flex items-center gap-2 mx-auto disabled:opacity-60"
+          >
+            {signingIn
+              ? <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              : <GoogleIcon />
+            }
+            {signingIn ? 'Signing in…' : 'Start Free with Google'}
           </button>
         </div>
       </section>
