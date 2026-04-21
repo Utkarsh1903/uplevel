@@ -70,14 +70,38 @@ export default function Admin() {
     if (isAdmin) loadAll();
   }, [profile]);
 
+  // Poll presence stats separately — gives heartbeat time to land, then stays live
+  useEffect(() => {
+    if (!isAdmin) return;
+    const fetchPresence = async () => {
+      const { data } = await supabase.from('profiles').select('id, last_seen');
+      if (!data) return;
+      const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
+      const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
+      // Update stat cards
+      setStats(s => ({
+        ...s,
+        onlineNow:   data.filter(p => p.last_seen && new Date(p.last_seen) > fiveMinAgo).length,
+        activeToday: data.filter(p => p.last_seen && new Date(p.last_seen) >= startOfDay).length,
+      }));
+      // Patch last_seen into the profiles list so the table column shows correct values
+      setProfiles(prev => prev.map(p => {
+        const fresh = data.find(d => d.id === p.id);
+        return fresh ? { ...p, last_seen: fresh.last_seen } : p;
+      }));
+    };
+    // Wait 3s for the heartbeat write to complete, then poll every 30s
+    const delayed  = setTimeout(fetchPresence, 3000);
+    const interval = setInterval(fetchPresence, 30_000);
+    return () => { clearTimeout(delayed); clearInterval(interval); };
+  }, [isAdmin]);
+
   async function loadAll() {
     setLoading(true);
-    const today   = format(new Date(), 'yyyy-MM-dd');
     const weekAgo = format(subDays(new Date(), 7), 'yyyy-MM-dd');
 
-    const [profilesRes, logsRes, logsAllRes, mentorRes, premiumRes, prosRes] = await Promise.all([
+    const [profilesRes, logsAllRes, mentorRes, premiumRes, prosRes] = await Promise.all([
       supabase.from('profiles').select('*').order('created_at', { ascending: false }),
-      supabase.from('daily_logs').select('user_id').eq('date', today),
       supabase.from('daily_logs').select('problems_solved, study_minutes, date').gte('date', weekAgo),
       supabase.from('feature_requests').select('*').order('created_at', { ascending: false }),
       supabase.from('premium_requests').select('*').order('created_at', { ascending: false }),
@@ -85,10 +109,9 @@ export default function Admin() {
     ]);
 
     const allProfiles  = profilesRes.data  ?? [];
-    const todayLogs    = logsRes.data       ?? [];
-    const recentLogs   = logsAllRes.data    ?? [];
-    const mentorData   = mentorRes.data     ?? [];
-    const premiumData  = premiumRes.data    ?? [];
+    const recentLogs   = logsAllRes.data   ?? [];
+    const mentorData   = mentorRes.data    ?? [];
+    const premiumData  = premiumRes.data   ?? [];
 
     setProfiles(allProfiles);
     setMentorReqs(mentorData);
